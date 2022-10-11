@@ -132,9 +132,10 @@ class KnnController:
         res = [[0] * C for _ in range(R)]
         for col in range(C):
             values = [r[col] for r in matrix]
-            print('VALUES FOR COLUMN ORDER: ', values)
+            # print('VALUES FOR COLUMN ORDER: ', values)
             # values.sort(reverse=True) key=lambda tup: tup[1]
-            values.sort(key=lambda s: s[1])
+            values.sort(key=lambda s: s[0], reverse=True)
+            print('VALUES ordenada en teoria: ', values)
             for row in range(R):
                 res[row][col] = values.pop()
         return res
