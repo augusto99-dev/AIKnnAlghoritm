@@ -91,20 +91,20 @@ class KnnController:
             for j in range(len(data_points)):
                 if i == j:
                     # guardo distancia que es 0, y su clase [2]
-                    matrix_distances[i][j] = [0, data_points[j][2]]
-                    print('Data point j2 : ', data_points[j][2])
+                    matrix_distances[i][j] = [0, data_points[i][2]]
+                    print('Data point j2 : ', data_points[i][2])
 
                     # matrix_distances[i][j] = 0
                     # print('PRINT AFFTER ERROR: ', matrix_distances[i][j])
                 elif i > j:
                     # copio el valor ya calculado, pero como incluye su clase yo quiero solo la distancia ya que estamos tratando otra columna la clase cambia
-                    matrix_distances[i][j] = [matrix_distances[j][i][0], data_points[j][2]]
+                    matrix_distances[i][j] = [matrix_distances[j][i][0], data_points[i][2]]
                     print('Data point i > j  : ', matrix_distances[i][j])
                     # matrix_distances[i][j] = matrix_distances[j][i]
                 else:
                     aux = []
                     aux.append(float(self.euclidean_distance(data_points[i], data_points[j])))
-                    aux.append(int(data_points[j][2]))
+                    aux.append(data_points[i][2])
                     #matrix_distances[i][j] = [self.euclidean_distance(data_points[i], data_points[j]), data_points[j][2]]
                     matrix_distances[i][j] = aux
                     print('ELSE I < J: ', matrix_distances[i][j])
@@ -114,19 +114,26 @@ class KnnController:
         print('The matrix of distances: ', np.array(matrix_distances))
         # Hasta aqui la matriz de distancias
 
-        # ahora ordenar matrix de distancias guardando el punto en cada celda
-        # matrix_order_points = [[0 for x in range(quantity_points)] for y in range(quantity_points)]
-        # for j in range(len(data_points)):
-        #     for i in range(len(data_points)):
-        #         # guardo los puntos de encabezado de la tabla
-        #         if i == 0:
-        #             matrix_order_points[i][j] = data_points[j]
-        #         else:
-        #             matrix_order_points[i][j][0] = matrix_distances[i][j]
-        #             matrix_order_points[i][j][1] = data_points[j]
-
         matrix_ordered = self.order_matrix_by_column(matrix_distances, len(matrix_distances), len(matrix_distances[0]))
         print('Matriz ordenada: ', np.array(matrix_ordered))
+        self.build_matrix_of_k(matrix_ordered, len(matrix_distances), len(matrix_distances[0]))
+
+    def build_matrix_of_k(self, matrix_ordered, R, C):
+        res = [[0] * C for _ in range(R)]
+        c0 = 0
+        c1 = 0
+        for col in range(C):
+            values = [r[col] for r in matrix_ordered]
+            values.sort(key=lambda s: s[0], reverse=True)
+            print('VALUES ordenada en teoria para comparar los c0 y c1: ', values)
+            for i in range(R):
+                # obtengo la clase
+                item = values.pop()
+                print('The Class in matrix ordered: ', item[1])
+                #if values[i][1] == 0:
+                #    c0 =+ 1
+        return res
+
 
     def order_matrix_by_column(self, matrix, R, C):
         res = [[0] * C for _ in range(R)]
