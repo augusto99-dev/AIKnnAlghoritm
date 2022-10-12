@@ -116,17 +116,42 @@ class KnnController:
 
         matrix_ordered = self.order_matrix_by_column(matrix_distances, len(matrix_distances), len(matrix_distances[0]))
         print('Matriz ordenada: ', np.array(matrix_ordered))
-        self.build_matrix_of_k(matrix_ordered, len(matrix_distances), len(matrix_distances[0]))
+        matrix_of_ones = self.build_matrix_of_k(matrix_ordered, len(matrix_distances), len(matrix_distances[0]))
+        k = self.get_row_max_k(matrix_of_ones)
+        print('K OPTIMO: ', k)
+
+    def get_row_max_k(self, matrix):
+        result = []
+        for i in range(len(matrix)):
+            # print('fil.', i)
+            sum_aux = 0
+            for j in range(len(matrix) + 1):
+                # print('col.', j)
+                sum_aux += matrix[i][j]
+            result.append(sum_aux)
+            # print('Suma fila: ', sum_aux)
+        tmp = max(result)
+        k = result.index(tmp) + 1 # + 1 porque usamos los indices de arreglos!
+        print('Valor maximo: ', tmp)
+        print('K Optimo:::: ', k)
+        return k
+
 
     def build_matrix_of_k(self, matrix_ordered, R, C):
-        res = [[0] * C for _ in range(R)]
+        # matriz con una fila menos
+        res = [[0] * C for _ in range(R - 1)]
         c0 = 0
         c1 = 0
         for col in range(C):
             values = [r[col] for r in matrix_ordered]
             values.sort(key=lambda s: s[0], reverse=True)
             print('VALUES ordenada en teoria para comparar los c0 y c1: ', values)
-            for i in range(R):
+            print('columna::::: ', col)
+            # obtengo la clase dueña de la columna
+            item_owner = values.pop()
+            for i in range(1, R):
+            #for i = 1 in range(R):
+                print('ITERATOR: ', i)
                 # obtengo la clase
                 item = values.pop()
                 print('The Class in matrix ordered: ', item[1])
@@ -136,8 +161,29 @@ class KnnController:
                     c1 += 1
                 else:
                     print('no deberia llegar aqui')
-        print('Class 0: ', c0)
-        print('Class 1: ', c1)
+                print('Hasta el momento: ')
+                print('c0: ', c0)
+                print('c1: ', c1)
+                if c0 > c1:
+                    if int(item_owner[1]) == 0:
+                        print('Cargo 1 en la matrix')
+                        res[i-1][col] = 1
+                    else:
+                        print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
+                        res[i - 1][col] = 0
+                elif c0 < c1:
+                    if int(item_owner[1]) == 1:
+                        print('Cargo 1 en la matrix')
+                        res[i - 1][col] = 1
+                    else:
+                        print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
+                        res[i - 1][col] = 0
+                else:
+                    # Aca cuando no se puede decidir por ser iguales.
+                    res[i - 1][col] = 0
+            c0 = 0
+            c1 = 0
+        print('Final matrix:: ', np.array(res))
         return res
 
 
