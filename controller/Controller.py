@@ -130,8 +130,14 @@ class KnnController:
                 # obtengo la clase
                 item = values.pop()
                 print('The Class in matrix ordered: ', item[1])
-                #if values[i][1] == 0:
-                #    c0 =+ 1
+                if int(item[1]) == 0:
+                    c0 += 1
+                elif int(item[1]) == 1:
+                    c1 += 1
+                else:
+                    print('no deberia llegar aqui')
+        print('Class 0: ', c0)
+        print('Class 1: ', c1)
         return res
 
 
