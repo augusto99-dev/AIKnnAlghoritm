@@ -142,6 +142,7 @@ class KnnController:
         res = [[0] * C for _ in range(R - 1)]
         c0 = 0
         c1 = 0
+        c2 = 0
         for col in range(C):
             values = [r[col] for r in matrix_ordered]
             values.sort(key=lambda s: s[0], reverse=True)
@@ -159,20 +160,30 @@ class KnnController:
                     c0 += 1
                 elif int(item[1]) == 1:
                     c1 += 1
+                elif int(item[1]) == 2:
+                    c2 += 1
                 else:
                     print('no deberia llegar aqui')
                 print('Hasta el momento: ')
                 print('c0: ', c0)
                 print('c1: ', c1)
-                if c0 > c1:
+                print('c2: ', c2)
+                if c0 > c1 and c0 > c2:
                     if int(item_owner[1]) == 0:
                         print('Cargo 1 en la matrix')
                         res[i-1][col] = 1
                     else:
                         print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
                         res[i - 1][col] = 0
-                elif c0 < c1:
+                elif c0 < c1 and c2 < c1:
                     if int(item_owner[1]) == 1:
+                        print('Cargo 1 en la matrix')
+                        res[i - 1][col] = 1
+                    else:
+                        print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
+                        res[i - 1][col] = 0
+                elif c2 > c1 and c2 > c0:
+                    if int(item_owner[1]) == 2:
                         print('Cargo 1 en la matrix')
                         res[i - 1][col] = 1
                     else:
@@ -206,7 +217,7 @@ class KnnController:
         class_result = self.get_class(neighbors, 3)
         print('Clasifica como clase: ', class_result)
 
-        data = self.open_file_data('dataset4.csv')
+        data = self.open_file_data('dataset1.csv')
         print('Data leida CSV: ', data)
         # print('Data 1: ', data[0])
         # [-5. -2.  0.]
