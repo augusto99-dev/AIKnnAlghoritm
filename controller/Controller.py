@@ -92,14 +92,14 @@ class KnnController:
                 if i == j:
                     # guardo distancia que es 0, y su clase [2]
                     matrix_distances[i][j] = [0, data_points[i][2]]
-                    print('Data point j2 : ', data_points[i][2])
+                    #print('Data point j2 : ', data_points[i][2])
 
                     # matrix_distances[i][j] = 0
                     # print('PRINT AFFTER ERROR: ', matrix_distances[i][j])
                 elif i > j:
                     # copio el valor ya calculado, pero como incluye su clase yo quiero solo la distancia ya que estamos tratando otra columna la clase cambia
                     matrix_distances[i][j] = [matrix_distances[j][i][0], data_points[i][2]]
-                    print('Data point i > j  : ', matrix_distances[i][j])
+                    #print('Data point i > j  : ', matrix_distances[i][j])
                     # matrix_distances[i][j] = matrix_distances[j][i]
                 else:
                     aux = []
@@ -107,7 +107,7 @@ class KnnController:
                     aux.append(data_points[i][2])
                     #matrix_distances[i][j] = [self.euclidean_distance(data_points[i], data_points[j]), data_points[j][2]]
                     matrix_distances[i][j] = aux
-                    print('ELSE I < J: ', matrix_distances[i][j])
+                    #print('ELSE I < J: ', matrix_distances[i][j])
 
                     # matrix_distances[i][j] = self.euclidean_distance(data_points[i], data_points[j])
 
@@ -130,10 +130,15 @@ class KnnController:
                 sum_aux += matrix[i][j]
             result.append(sum_aux)
             # print('Suma fila: ', sum_aux)
+        print('Array de k values rows: ', np.array(result))
         tmp = max(result)
         k = result.index(tmp) + 1 # + 1 porque usamos los indices de arreglos!
         print('Valor maximo: ', tmp)
         print('K Optimo:::: ', k)
+
+        #my_list = [10, 72, 54, 25, 73, 40]
+        max_item = max(result)
+        print(f'Max index is : {result.index(max_item)}')
         return k
 
 
@@ -146,16 +151,16 @@ class KnnController:
         for col in range(C):
             values = [r[col] for r in matrix_ordered]
             values.sort(key=lambda s: s[0], reverse=True)
-            print('VALUES ordenada en teoria para comparar los c0 y c1: ', values)
-            print('columna::::: ', col)
+            # print('VALUES ordenada en teoria para comparar los c0 y c1: ', values)
+            # print('columna::::: ', col)
             # obtengo la clase dueña de la columna
             item_owner = values.pop()
             for i in range(1, R):
             #for i = 1 in range(R):
-                print('ITERATOR: ', i)
+                # print('ITERATOR: ', i)
                 # obtengo la clase
                 item = values.pop()
-                print('The Class in matrix ordered: ', item[1])
+                # print('The Class in matrix ordered: ', item[1])
                 if int(item[1]) == 0:
                     c0 += 1
                 elif int(item[1]) == 1:
@@ -164,30 +169,30 @@ class KnnController:
                     c2 += 1
                 else:
                     print('no deberia llegar aqui')
-                print('Hasta el momento: ')
-                print('c0: ', c0)
-                print('c1: ', c1)
-                print('c2: ', c2)
+                #print('Hasta el momento: ')
+                #print('c0: ', c0)
+                #print('c1: ', c1)
+                #print('c2: ', c2)
                 if c0 > c1 and c0 > c2:
                     if int(item_owner[1]) == 0:
-                        print('Cargo 1 en la matrix')
+                        #print('Cargo 1 en la matrix')
                         res[i-1][col] = 1
                     else:
-                        print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
+                        #print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
                         res[i - 1][col] = 0
                 elif c0 < c1 and c2 < c1:
                     if int(item_owner[1]) == 1:
-                        print('Cargo 1 en la matrix')
+                        #print('Cargo 1 en la matrix')
                         res[i - 1][col] = 1
                     else:
-                        print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
+                        #print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
                         res[i - 1][col] = 0
                 elif c2 > c1 and c2 > c0:
                     if int(item_owner[1]) == 2:
-                        print('Cargo 1 en la matrix')
+                        #print('Cargo 1 en la matrix')
                         res[i - 1][col] = 1
                     else:
-                        print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
+                        #print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
                         res[i - 1][col] = 0
                 else:
                     # Aca cuando no se puede decidir por ser iguales.
@@ -205,7 +210,7 @@ class KnnController:
             # print('VALUES FOR COLUMN ORDER: ', values)
             # values.sort(reverse=True) key=lambda tup: tup[1]
             values.sort(key=lambda s: s[0], reverse=True)
-            print('VALUES ordenada en teoria: ', values)
+            #print('VALUES ordenada en teoria: ', values)
             for row in range(R):
                 res[row][col] = values.pop()
         return res
@@ -217,7 +222,7 @@ class KnnController:
         class_result = self.get_class(neighbors, 3)
         print('Clasifica como clase: ', class_result)
 
-        data = self.open_file_data('dataset1.csv')
+        data = self.open_file_data('dataset5.csv')
         print('Data leida CSV: ', data)
         # print('Data 1: ', data[0])
         # [-5. -2.  0.]
