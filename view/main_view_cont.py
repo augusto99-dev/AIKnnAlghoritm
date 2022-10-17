@@ -1,4 +1,5 @@
 from main_view import *
+from Graphics2D import *
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QTableWidgetItem
 import csv
@@ -14,6 +15,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.tableWidget.setColumnWidth(2,100) 
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setHorizontalHeaderLabels(("X","Y","CLASE"))
+        self.grafica = Canvas_grafica()
+        self.grafico_1 = Canvas_grafica2()
+        self.grafico1.addWidget(self.grafica)
 
     def open_file(self,archivo):
         with open(archivo[0], 'r') as file:
