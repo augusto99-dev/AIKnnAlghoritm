@@ -90,24 +90,130 @@ class KnnController:
         for i in range(len(data_points)):
             for j in range(len(data_points)):
                 if i == j:
-                    matrix_distances[i][j] = 0
+                    # guardo distancia que es 0, y su clase [2]
+                    matrix_distances[i][j] = [0, data_points[i][2]]
+                    #print('Data point j2 : ', data_points[i][2])
+
+                    # matrix_distances[i][j] = 0
+                    # print('PRINT AFFTER ERROR: ', matrix_distances[i][j])
                 elif i > j:
-                    matrix_distances[i][j] = matrix_distances[j][i]
+                    # copio el valor ya calculado, pero como incluye su clase yo quiero solo la distancia ya que estamos tratando otra columna la clase cambia
+                    matrix_distances[i][j] = [matrix_distances[j][i][0], data_points[i][2]]
+                    #print('Data point i > j  : ', matrix_distances[i][j])
+                    # matrix_distances[i][j] = matrix_distances[j][i]
                 else:
-                    matrix_distances[i][j] = self.euclidean_distance(data_points[i], data_points[j])
+                    aux = []
+                    aux.append(float(self.euclidean_distance(data_points[i], data_points[j])))
+                    aux.append(data_points[i][2])
+                    #matrix_distances[i][j] = [self.euclidean_distance(data_points[i], data_points[j]), data_points[j][2]]
+                    matrix_distances[i][j] = aux
+                    #print('ELSE I < J: ', matrix_distances[i][j])
+
+                    # matrix_distances[i][j] = self.euclidean_distance(data_points[i], data_points[j])
+
         print('The matrix of distances: ', np.array(matrix_distances))
         # Hasta aqui la matriz de distancias
 
-        # ahora ordenar matrix de distancias guardando el punto en cada celda
-        matrix_order_points = [[0 for x in range(quantity_points)] for y in range(quantity_points)]
-        for j in range(len(data_points)):
-            for i in range(len(data_points)):
-                # guardo los puntos de encabezado de la tabla
-                if i == 0:
-                    matrix_order_points[i][j] = data_points[j]
+        matrix_ordered = self.order_matrix_by_column(matrix_distances, len(matrix_distances), len(matrix_distances[0]))
+        print('Matriz ordenada: ', np.array(matrix_ordered))
+        matrix_of_ones = self.build_matrix_of_k(matrix_ordered, len(matrix_distances), len(matrix_distances[0]))
+        k = self.get_row_max_k(matrix_of_ones)
+        print('K OPTIMO: ', k)
+
+    def get_row_max_k(self, matrix):
+        result = []
+        for i in range(len(matrix)):
+            # print('fil.', i)
+            sum_aux = 0
+            for j in range(len(matrix) + 1):
+                # print('col.', j)
+                sum_aux += matrix[i][j]
+            result.append(sum_aux)
+            # print('Suma fila: ', sum_aux)
+        print('Array de k values rows: ', np.array(result))
+        tmp = max(result)
+        k = result.index(tmp) + 1 # + 1 porque usamos los indices de arreglos!
+        print('Valor maximo: ', tmp)
+        print('K Optimo:::: ', k)
+
+        #my_list = [10, 72, 54, 25, 73, 40]
+        max_item = max(result)
+        print(f'Max index is : {result.index(max_item)}')
+        return k
+
+
+    def build_matrix_of_k(self, matrix_ordered, R, C):
+        # matriz con una fila menos
+        res = [[0] * C for _ in range(R - 1)]
+        c0 = 0
+        c1 = 0
+        c2 = 0
+        for col in range(C):
+            values = [r[col] for r in matrix_ordered]
+            values.sort(key=lambda s: s[0], reverse=True)
+            # print('VALUES ordenada en teoria para comparar los c0 y c1: ', values)
+            # print('columna::::: ', col)
+            # obtengo la clase dueña de la columna
+            item_owner = values.pop()
+            for i in range(1, R):
+            #for i = 1 in range(R):
+                # print('ITERATOR: ', i)
+                # obtengo la clase
+                item = values.pop()
+                # print('The Class in matrix ordered: ', item[1])
+                if int(item[1]) == 0:
+                    c0 += 1
+                elif int(item[1]) == 1:
+                    c1 += 1
+                elif int(item[1]) == 2:
+                    c2 += 1
                 else:
-                    matrix_order_points[i][j][0] = matrix_distances[i][j]
-                    matrix_order_points[i][j][1] = data_points[j]
+                    print('no deberia llegar aqui')
+                #print('Hasta el momento: ')
+                #print('c0: ', c0)
+                #print('c1: ', c1)
+                #print('c2: ', c2)
+                if c0 > c1 and c0 > c2:
+                    if int(item_owner[1]) == 0:
+                        #print('Cargo 1 en la matrix')
+                        res[i-1][col] = 1
+                    else:
+                        #print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
+                        res[i - 1][col] = 0
+                elif c0 < c1 and c2 < c1:
+                    if int(item_owner[1]) == 1:
+                        #print('Cargo 1 en la matrix')
+                        res[i - 1][col] = 1
+                    else:
+                        #print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
+                        res[i - 1][col] = 0
+                elif c2 > c1 and c2 > c0:
+                    if int(item_owner[1]) == 2:
+                        #print('Cargo 1 en la matrix')
+                        res[i - 1][col] = 1
+                    else:
+                        #print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
+                        res[i - 1][col] = 0
+                else:
+                    # Aca cuando no se puede decidir por ser iguales.
+                    res[i - 1][col] = 0
+            c0 = 0
+            c1 = 0
+        print('Final matrix:: ', np.array(res))
+        return res
+
+
+    def order_matrix_by_column(self, matrix, R, C):
+        res = [[0] * C for _ in range(R)]
+        for col in range(C):
+            values = [r[col] for r in matrix]
+            # print('VALUES FOR COLUMN ORDER: ', values)
+            # values.sort(reverse=True) key=lambda tup: tup[1]
+            values.sort(key=lambda s: s[0], reverse=True)
+            #print('VALUES ordenada en teoria: ', values)
+            for row in range(R):
+                res[row][col] = values.pop()
+        return res
 
     def run_algorith(self):
         point_unknowkn = [2, 1]
@@ -116,7 +222,7 @@ class KnnController:
         class_result = self.get_class(neighbors, 3)
         print('Clasifica como clase: ', class_result)
 
-        data = self.open_file_data('dataset4.csv')
+        data = self.open_file_data('dataset5.csv')
         print('Data leida CSV: ', data)
         # print('Data 1: ', data[0])
         # [-5. -2.  0.]
