@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="documentMode">
      <bool>true</bool>
@@ -66,6 +66,19 @@
         <string>Clase</string>
        </property>
       </column>
+     </widget>
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>540</x>
+        <y>50</y>
+        <width>151</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Correr Algoritmo</string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
