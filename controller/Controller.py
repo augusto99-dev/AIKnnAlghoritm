@@ -30,8 +30,8 @@ class KnnController:
         for pair_dataset in dataset:
             distance = self.euclidean_distance(point, pair_dataset)
             self.distances.append((pair_dataset, distance))
-        self.distances.sort(key=lambda tup: tup[1])
         print('Vector with distances ::: ', self.distances)
+        self.distances.sort(key=lambda tup: tup[1])
         return self.distances
 
     def get_class_ponderated(self, neighbors: list):
@@ -59,17 +59,24 @@ class KnnController:
     def get_class(self, neighbors: list, k):
         class_0 = 0
         class_1 = 0
+        class_2 = 0
         range_k = range(k)
         array_of_k_elements = [neighbors[i] for i in range_k]
         print('primeros k elementos: ', array_of_k_elements)
         class_0 = sum(self.validate_class(0, x) for x in array_of_k_elements)
         class_1 = sum(self.validate_class(1, x) for x in array_of_k_elements)
+        class_2 = sum(self.validate_class(2, x) for x in array_of_k_elements)
+
         print('class 0 quantity: ', class_0)
         print('class 1 quantity: ', class_1)
-        if class_0 > class_1:
+        print('class 2 quantity: ', class_2)
+
+        if class_0 > class_1 and class_0 > class_2:
             return 0
-        else:
+        elif class_1 > class_0 and class_1 > class_2:
             return 1
+        else:
+            return 2
 
         # for i in range(len(neighbors)):
         #     print('value in matrix: ', neighbors[i][0][2])
@@ -151,16 +158,16 @@ class KnnController:
         for col in range(C):
             values = [r[col] for r in matrix_ordered]
             values.sort(key=lambda s: s[0], reverse=True)
-            print('VALUES ordenada en teoria para comparar los c0 y c1: ', values)
-            print('columna::::: ', col)
+            # print('VALUES ordenada en teoria para comparar los c0 y c1: ', values)
+            # print('columna::::: ', col)
             # obtengo la clase dueña de la columna
             item_owner = values.pop()
             for i in range(1, R):
             #for i = 1 in range(R):
-                print('ITERATOR: ', i)
+                # print('ITERATOR: ', i)
                 # obtengo la clase
                 item = values.pop()
-                print('The Class in matrix ordered: ', item[1])
+                # print('The Class in matrix ordered: ', item[1])
                 if int(item[1]) == 0:
                     c0 += 1
                 elif int(item[1]) == 1:
@@ -169,30 +176,30 @@ class KnnController:
                     c2 += 1
                 else:
                     print('no deberia llegar aqui')
-                print('Hasta el momento: ')
-                print('c0: ', c0)
-                print('c1: ', c1)
-                print('c2: ', c2)
+                # print('Hasta el momento: ')
+                # print('c0: ', c0)
+                # print('c1: ', c1)
+                # print('c2: ', c2)
                 if c0 > c1 and c0 > c2:
                     if int(item_owner[1]) == 0:
-                        print('Cargo 1 en la matrix, gano c0')
+                        # print('Cargo 1 en la matrix, gano c0')
                         res[i-1][col] = 1
                     else:
-                        print('Cargo 0 en la matrix porque la clase 1 no gano y aca comparo por la clase 1.')
+                        # print('Cargo 0 en la matrix porque la clase 1 no gano y aca comparo por la clase 1.')
                         res[i - 1][col] = 0
                 elif c0 < c1 and c2 < c1:
                     if int(item_owner[1]) == 1:
-                        print('Cargo 1 en la matrix, gano c1')
+                        # print('Cargo 1 en la matrix, gano c1')
                         res[i - 1][col] = 1
                     else:
-                        print('Cargo 0 en la matrix porque la c0 o c1 gano y aca comparo por la clase 1.')
+                        # print('Cargo 0 en la matrix porque la c0 o c1 gano y aca comparo por la clase 1.')
                         res[i - 1][col] = 0
                 elif c2 > c1 and c2 > c0:
                     if int(item_owner[1]) == 2:
-                        print('Cargo 1 en la matrix gano c2.')
+                        # print('Cargo 1 en la matrix gano c2.')
                         res[i - 1][col] = 1
                     else:
-                        print('Cargo 0 en la matrix porque la clase c2 no gano y aca comparo por la clase 2.')
+                        # print('Cargo 0 en la matrix porque la clase c2 no gano y aca comparo por la clase 2.')
                         res[i - 1][col] = 0
                 else:
                     # Aca cuando no se puede decidir por ser iguales.
@@ -211,24 +218,55 @@ class KnnController:
             # print('VALUES FOR COLUMN ORDER: ', values)
             # values.sort(reverse=True) key=lambda tup: tup[1]
             values.sort(key=lambda s: s[0], reverse=True)
-            #print('VALUES ordenada en teoria: ', values)
+            # print('VALUES ordenada en teoria: ', values)
             for row in range(R):
                 res[row][col] = values.pop()
         return res
 
-    def run_algorith(self):
-        point_unknowkn = [2, 1]
-        neighbors = self.get_neighbors(point_unknowkn, self.dataset)
-        print('neighbors quantity: ', len(neighbors))
-        class_result = self.get_class(neighbors, 3)
-        print('Clasifica como clase: ', class_result)
+    def get_test_values(self, matrix):
+        # for i in range(len(matrix)):
+        #     for j in range(len(matrix[0])):
+        #         matrix[i][j]
+        array_test = []
+        # c0
+        for i in range(160, 200):
+            array_test.append(matrix[i])
+        for i in range(360, 400):
+            array_test.append(matrix[i])
+        for i in range(560, 600):
+            array_test.append(matrix[i])
 
-        data = self.open_file_data('dataset5.csv')
+        print('array ::: ', np.array(array_test))
+        print('lenght:: ', len(array_test))
+
+        return np.array(array_test)
+
+    def exec_test_data_knn(self, data_test, matrix):
+        for i in range(len(data_test)):
+            neighbors = self.get_neighbors(data_test[i], matrix)
+            print('neighbors quantity: ', len(neighbors))
+            class_result = self.get_class(neighbors, 3)
+            print('Clasifica como clase: ', class_result)
+            neighbors.clear()
+
+
+    def run_algorith(self):
+        data = self.open_file_data('dataset1.csv')
         print('Data leida CSV: ', data)
         # print('Data 1: ', data[0])
         # [-5. -2.  0.]
 
-        self.get_k_optim(data)
+        # Funca
+        #self.get_k_optim(data)
+
+        #point_unknowkn = [2, 1]
+        #neighbors = self.get_neighbors(point_unknowkn, self.dataset)
+        #print('neighbors quantity: ', len(neighbors))
+        #class_result = self.get_class(neighbors, 3)
+        #print('Clasifica como clase: ', class_result)
+
+        test_data = self.get_test_values(data)
+        self.exec_test_data_knn(test_data, data)
 
         # print('lista de vecinos: ', neighbors)
         # classif = self.get_class_ponderated(neighbors)
