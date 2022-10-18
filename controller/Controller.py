@@ -151,16 +151,16 @@ class KnnController:
         for col in range(C):
             values = [r[col] for r in matrix_ordered]
             values.sort(key=lambda s: s[0], reverse=True)
-            # print('VALUES ordenada en teoria para comparar los c0 y c1: ', values)
-            # print('columna::::: ', col)
+            print('VALUES ordenada en teoria para comparar los c0 y c1: ', values)
+            print('columna::::: ', col)
             # obtengo la clase dueña de la columna
             item_owner = values.pop()
             for i in range(1, R):
             #for i = 1 in range(R):
-                # print('ITERATOR: ', i)
+                print('ITERATOR: ', i)
                 # obtengo la clase
                 item = values.pop()
-                # print('The Class in matrix ordered: ', item[1])
+                print('The Class in matrix ordered: ', item[1])
                 if int(item[1]) == 0:
                     c0 += 1
                 elif int(item[1]) == 1:
@@ -169,36 +169,37 @@ class KnnController:
                     c2 += 1
                 else:
                     print('no deberia llegar aqui')
-                #print('Hasta el momento: ')
-                #print('c0: ', c0)
-                #print('c1: ', c1)
-                #print('c2: ', c2)
+                print('Hasta el momento: ')
+                print('c0: ', c0)
+                print('c1: ', c1)
+                print('c2: ', c2)
                 if c0 > c1 and c0 > c2:
                     if int(item_owner[1]) == 0:
-                        #print('Cargo 1 en la matrix')
+                        print('Cargo 1 en la matrix, gano c0')
                         res[i-1][col] = 1
                     else:
-                        #print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
+                        print('Cargo 0 en la matrix porque la clase 1 no gano y aca comparo por la clase 1.')
                         res[i - 1][col] = 0
                 elif c0 < c1 and c2 < c1:
                     if int(item_owner[1]) == 1:
-                        #print('Cargo 1 en la matrix')
+                        print('Cargo 1 en la matrix, gano c1')
                         res[i - 1][col] = 1
                     else:
-                        #print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
+                        print('Cargo 0 en la matrix porque la c0 o c1 gano y aca comparo por la clase 1.')
                         res[i - 1][col] = 0
                 elif c2 > c1 and c2 > c0:
                     if int(item_owner[1]) == 2:
-                        #print('Cargo 1 en la matrix')
+                        print('Cargo 1 en la matrix gano c2.')
                         res[i - 1][col] = 1
                     else:
-                        #print('Cargo 0 en la matrix porque la clase 1 gano y aca comparo por la clase 0.')
+                        print('Cargo 0 en la matrix porque la clase c2 no gano y aca comparo por la clase 2.')
                         res[i - 1][col] = 0
                 else:
                     # Aca cuando no se puede decidir por ser iguales.
                     res[i - 1][col] = 0
             c0 = 0
             c1 = 0
+            c2 = 0
         print('Final matrix:: ', np.array(res))
         return res
 
