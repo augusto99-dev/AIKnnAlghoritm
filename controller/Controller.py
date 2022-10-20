@@ -30,11 +30,30 @@ class KnnController:
         for pair_dataset in dataset:
             distance = self.euclidean_distance(point, pair_dataset)
             self.distances.append((pair_dataset, distance))
-        print('Vector with distances ::: ', self.distances)
+        #print('Vector with distances ::: ', self.distances)
         self.distances.sort(key=lambda tup: tup[1])
         return self.distances
 
-    def get_class_ponderated(self, neighbors: list):
+    def get_neighbors_of_trainee_data(self, point, dataset):
+        distances = list()
+        # for 80% Clase 0
+        for i in range(0, 160):
+            distance = self.euclidean_distance(point, dataset[i])
+            self.distances.append((dataset[i], distance))
+        # for 80% Clase 1
+        for i in range(200, 360):
+            distance = self.euclidean_distance(point, dataset[i])
+            self.distances.append((dataset[i], distance))
+        # for 80% Clase 2
+        for i in range(400, 560):
+            distance = self.euclidean_distance(point, dataset[i])
+            self.distances.append((dataset[i], distance))
+        print('Vector with distances TRAINEE DATA ::: ', self.distances)
+        self.distances.sort(key=lambda tup: tup[1])
+        return self.distances
+
+    # deprecated
+    def get_class_ponderated_old(self, neighbors: list):
         freq1 = 0
         freq2 = 0
         for i in range(len(neighbors)):
@@ -56,13 +75,38 @@ class KnnController:
         else:
             return 0
 
+    def get_class_ponderated(self, neighbors: list, k):
+        class_0 = 0
+        class_1 = 0
+        class_2 = 0
+        range_k = range(k)
+        array_of_k_elements = [neighbors[i] for i in range_k]
+        #print('primeros k elementos: ', array_of_k_elements)
+
+        for i in range(len(neighbors)):
+            if neighbors[i][1] != 0:  # not division by zero
+                class_0 += 1/neighbors[i][1] * self.validate_class(0, neighbors[i])
+                class_1 += 1/neighbors[i][1] * self.validate_class(1, neighbors[i])
+                class_2 += 1/neighbors[i][1] * self.validate_class(2, neighbors[i])
+
+        print('class 0 quantity: ', class_0)
+        print('class 1 quantity: ', class_1)
+        print('class 2 quantity: ', class_2)
+
+        if class_0 > class_1 and class_0 > class_2:
+            return 0
+        elif class_1 > class_0 and class_1 > class_2:
+            return 1
+        else:
+            return 2
+
     def get_class(self, neighbors: list, k):
         class_0 = 0
         class_1 = 0
         class_2 = 0
         range_k = range(k)
         array_of_k_elements = [neighbors[i] for i in range_k]
-        print('primeros k elementos: ', array_of_k_elements)
+        # print('primeros k elementos: ', array_of_k_elements)
         class_0 = sum(self.validate_class(0, x) for x in array_of_k_elements)
         class_1 = sum(self.validate_class(1, x) for x in array_of_k_elements)
         class_2 = sum(self.validate_class(2, x) for x in array_of_k_elements)
@@ -123,6 +167,7 @@ class KnnController:
 
         matrix_ordered = self.order_matrix_by_column(matrix_distances, len(matrix_distances), len(matrix_distances[0]))
         print('Matriz ordenada: ', np.array(matrix_ordered))
+        # segundo parametro (len(matrix_distances)) parametro es el k variable
         matrix_of_ones = self.build_matrix_of_k(matrix_ordered, len(matrix_distances), len(matrix_distances[0]))
         k = self.get_row_max_k(matrix_of_ones)
         print('K OPTIMO: ', k)
@@ -223,6 +268,7 @@ class KnnController:
                 res[row][col] = values.pop()
         return res
 
+    # deprecated pue
     def get_test_values(self, matrix):
         # for i in range(len(matrix)):
         #     for j in range(len(matrix[0])):
@@ -241,13 +287,29 @@ class KnnController:
 
         return np.array(array_test)
 
-    def exec_test_data_knn(self, data_test, matrix):
+    def exec_data_knn(self, data_test, matrix, k):
         for i in range(len(data_test)):
             neighbors = self.get_neighbors(data_test[i], matrix)
             print('neighbors quantity: ', len(neighbors))
-            class_result = self.get_class(neighbors, 3)
+            class_result = self.get_class(neighbors, k)
             print('Clasifica como clase: ', class_result)
+            print('Sin embargo era de clase:: ', matrix[i][2])
             neighbors.clear()
+
+    def exec_data_knn_ponderated(self, data_test, matrix, k):
+        errors = 0
+        for i in range(len(data_test)):
+            neighbors = self.get_neighbors(data_test[i], matrix)
+            print('neighbors quantity: ', len(neighbors))
+            class_result = self.get_class_ponderated(neighbors, k)
+            print('Clasifica como clase: ', class_result)
+            print('Sin embargo era de clase:: ', matrix[i][2])
+            if int(class_result) != int(matrix[i][2]):
+                # contar los errores
+                errors += 1
+            neighbors.clear()
+        print('Errors quantity: ', errors)
+        return errors
 
 
     def run_algorith(self):
@@ -256,24 +318,42 @@ class KnnController:
         # print('Data 1: ', data[0])
         # [-5. -2.  0.]
 
-        # Funca
+        #############################################################
+        # Funca: 1- K optimo entre 1 y 15
+        #############################################################
         #self.get_k_optim(data)
 
         #point_unknowkn = [2, 1]
+
         #neighbors = self.get_neighbors(point_unknowkn, self.dataset)
         #print('neighbors quantity: ', len(neighbors))
         #class_result = self.get_class(neighbors, 3)
         #print('Clasifica como clase: ', class_result)
 
-        test_data = self.get_test_values(data)
-        self.exec_test_data_knn(test_data, data)
+        # test_data = self.get_test_values(data)
+
+        #############################################################
+        # Funca: 2- Evaluar la clasificacion utilizando el k optimo obtenido
+        #############################################################
+        # dataset, dataset, k
+        # self.exec_data_knn(data, data, 5)
+
+        #############################################################
+        # Process: 3- Obtener la mejor clasificacion utilizando knn ponderado para un rango de [1-15]
+        #############################################################
+        # dataset, dataset, k
+        # errors_array_in_k_ponderated = []
+        # for i in range(0,15):
+        #     quantity_errors_ponderated = self.exec_data_knn_ponderated(data, data, i)
+        #     errors_array_in_k_ponderated.append(quantity_errors_ponderated)
+        #     quantity_errors_ponderated = 0
+        # print('Errors Array in k ponderated: ', np.array(errors_array_in_k_ponderated))
+
 
         # print('lista de vecinos: ', neighbors)
-        # classif = self.get_class_ponderated(neighbors)
+        #classif = self.get_class_ponderated(neighbors)
         # print('THE CLASS CLASSIFIED TO UNKNOWN POINT IS: ', classif)
 
-        # for neighbor in neighbors:
-        #    print(neighbor)
 
 
     def open_file_data(self, filename):
