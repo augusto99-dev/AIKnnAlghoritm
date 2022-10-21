@@ -326,7 +326,7 @@ class KnnController:
 
 
     def run_algorith(self):
-        data = self.open_file_data('dataset3.csv')
+        data = self.open_file_data('dataset1.csv')
         print('Data leida CSV: ', data)
         # print('Data 1: ', data[0])
         # [-5. -2.  0.]
