@@ -4,6 +4,7 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from math import sqrt
 from controller.Controller import KnnController
+from view.Graphics2DTest import Graphics
 
 
 def print_hi(name):
@@ -14,8 +15,11 @@ def print_hi(name):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     controller = KnnController()
-    controller.run_algorith()
+    graphics = Graphics()
+    array_data = controller.run_algorith()
+    print('resulttttt. ', array_data)
 
+    graphics.plot_dataset(array_data)
 
 
 

@@ -1,3 +1,4 @@
+import copy
 from math import sqrt
 import numpy as np
 import csv
@@ -288,13 +289,25 @@ class KnnController:
         return np.array(array_test)
 
     def exec_data_knn(self, data_test, matrix, k):
+        matrix_result = []
         for i in range(len(data_test)):
             neighbors = self.get_neighbors(data_test[i], matrix)
             print('neighbors quantity: ', len(neighbors))
             class_result = self.get_class(neighbors, k)
             print('Clasifica como clase: ', class_result)
             print('Sin embargo era de clase:: ', matrix[i][2])
+            if int(class_result) != matrix[i][2]:
+                point_failed = copy.deepcopy(matrix[i])
+                if class_result == 0:
+                    point_failed[2] = -100
+                else:
+                    point_failed[2] = point_failed[2] * -1
+                print('point failed: ', point_failed)
+                matrix_result.append(point_failed)
+            else:
+                matrix_result.append(matrix[i])
             neighbors.clear()
+        return matrix_result
 
     def exec_data_knn_ponderated(self, data_test, matrix, k):
         errors = 0
@@ -313,7 +326,7 @@ class KnnController:
 
 
     def run_algorith(self):
-        data = self.open_file_data('dataset1.csv')
+        data = self.open_file_data('dataset3.csv')
         print('Data leida CSV: ', data)
         # print('Data 1: ', data[0])
         # [-5. -2.  0.]
@@ -321,7 +334,7 @@ class KnnController:
         #############################################################
         # Funca: 1- K optimo entre 1 y 15
         #############################################################
-        #self.get_k_optim(data)
+        # k_optim = self.get_k_optim(data)
 
         #point_unknowkn = [2, 1]
 
@@ -333,10 +346,11 @@ class KnnController:
         # test_data = self.get_test_values(data)
 
         #############################################################
-        # Funca: 2- Evaluar la clasificacion utilizando el k optimo obtenido
+        #Funca: 2- Evaluar la clasificacion utilizando el k optimo obtenido
         #############################################################
-        # dataset, dataset, k
-        # self.exec_data_knn(data, data, 5)
+        #dataset, dataset, k
+        result_points_plot = self.exec_data_knn(data, data, 5)
+        return np.array(result_points_plot)
 
         #############################################################
         # Process: 3- Obtener la mejor clasificacion utilizando knn ponderado para un rango de [1-15]
