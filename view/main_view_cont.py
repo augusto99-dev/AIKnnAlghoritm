@@ -1,32 +1,35 @@
+from controller.Controller import KnnController
 from main_view import *
 from Graphics2D import *
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QTableWidgetItem
 import csv
 import numpy as np
-from controller.Controller import KnnController
+
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
+    controller = KnnController()
     def __init__(self, *args, **kwargs):
         QtWidgets.QMainWindow.__init__(self, *args, **kwargs)
         self.setupUi(self)
         self.actionAbrir.triggered.connect(self.abrir)
-        self.pushButton.clicked.connect(self.run_alg())
+        self.pushButton.clicked.connect(self.run_alg)
         self.tableWidget.setColumnWidth(0, 100)
         self.tableWidget.setColumnWidth(1, 100)
         self.tableWidget.setColumnWidth(2, 100)
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setHorizontalHeaderLabels(("X", "Y", "CLASE"))
-        self.grafica = Canvas_grafica()
-        self.grafico_1 = Canvas_grafica2(self.run_alg)
-        self.grafico1.addWidget(self.grafica)
-        self.controller = KnnController()
+        self.grafica = None
+        self.dataset = None
+
 
     def run_alg(self):
-        self.controller.run_algorith(self.abrir())
-
+        #self.controller.run_algorith(self.get_file())
+        self.grafica = Canvas_grafica(self.get_file())
+        self.grafico1.addWidget(self.grafica)
+        print("asdasdasdas")
     def open_file(self, archivo):
         with open(archivo[0], 'r') as file:
             csvreader = csv.reader(file)
@@ -46,13 +49,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 n += 1
                 item = 0
             data = np.array(rows)
+            file.close()
             return data
 
     def abrir(self):
-        archivo = QFileDialog.getOpenFileName(self, 'abrir archivo', 'C:\\')
-        if archivo[0]:
-            data = self.open_file(archivo)
-        return archivo
+        self.dataset = QFileDialog.getOpenFileName(self, 'abrir archivo', 'C:\\')
+        if self.dataset[0]:
+            data = self.open_file(self.dataset)
+        return self.dataset
+    def get_file(self):
+       return self.dataset
 
 
 if __name__ == "__main__":

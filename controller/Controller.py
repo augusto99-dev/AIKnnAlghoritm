@@ -4,6 +4,7 @@ import csv
 
 class KnnController:
 
+
     def __init__(self):
         self.distances = []
         self.dataset = [[-5, -2, 0],
@@ -12,7 +13,8 @@ class KnnController:
                         [-3, -8, 1],
                         [-2, -9, 1],
                         [-4, -7, 1]]
-
+        self.data = None
+        self.data_float = None
         # Struct vector point
         # [x,y,class,distance]
 
@@ -215,7 +217,28 @@ class KnnController:
                 res[row][col] = values.pop()
         return res
 
-    def run_algorith(self):
+    def run_algorith(self,dataset):
+        point_unknowkn = [2, 1]
+        neighbors = self.get_neighbors(point_unknowkn, self.dataset)
+        print('neighbors quantity: ', len(neighbors))
+        class_result = self.get_class(neighbors, 3)
+        print('Clasifica como clase: ', class_result)
+        print('Data: ', dataset)
+        data = self.open_file_data(dataset)
+        print('Data leida CSV: ', data)
+        # print('Data 1: ', data[0])
+        # [-5. -2.  0.]
+
+        self.get_k_optim(data)
+
+        # print('lista de vecinos: ', neighbors)
+        # classif = self.get_class_ponderated(neighbors)
+        # print('THE CLASS CLASSIFIED TO UNKNOWN POINT IS: ', classif)
+
+        # for neighbor in neighbors:
+        #    print(neighbor)
+
+    def run_algorith_test(self):
         point_unknowkn = [2, 1]
         neighbors = self.get_neighbors(point_unknowkn, self.dataset)
         print('neighbors quantity: ', len(neighbors))
@@ -235,9 +258,25 @@ class KnnController:
 
         # for neighbor in neighbors:
         #    print(neighbor)
+    def open_file_data(self, path_dataset):
+        file = open(path_dataset[0])
+        type(file)
+        csvreader = csv.reader(file)
+        header = []
+        header = next(csvreader)
+        print(header)
+        rows = []
+        for row in csvreader:
+            rows.append(row)
+            # print('row: ', row)
+        # print(rows)
+        data = np.array(rows)
+        data_float = data.astype(float)
+        file.close()
 
+        return data_float
 
-    def open_file_data(self, filename):
+    def open_file_data_test(self, filename):
         # file = open('../datasets/' + filename)
         file = open('./datasets/' + filename)
         type(file)
@@ -251,6 +290,7 @@ class KnnController:
             # print('row: ', row)
         # print(rows)
         file.close()
-        data = np.array(rows)
-        data_float = data.astype(float)
+        self.data = np.array(rows)
+        data_float = self.data.astype(float)
+        self.data_float = data_float
         return data_float
