@@ -20,7 +20,7 @@ if __name__ == '__main__':
     #pass
     controller = KnnController()
     graphics = Graphics()
-    array_data = controller.run_algorithm_k_optim('./datasets/dataset3.csv', 4)
+    array_data = controller.run_algorithm_of_k_optim_ponderated('./datasets/dataset3.csv', 4)
     #print('resulttttt. ', array_data)
 
     #graphics.plot_dataset(array_data)
