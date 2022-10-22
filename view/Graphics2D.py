@@ -42,6 +42,19 @@ def get_data_porc(data, porcent):
     # print('80 porc of data: ', rows)
     print('tamaño de rows: ', len(rows))
     return rows
+def grafica_datos1(canvas,data):
+    #data = self.controller.get_point_to_plot()
+    # grafica el resultado del algoritmo
+    x = data[:, [0, 1, 2]]
+    y = data[:, -1].astype(int)
+    plt.title("Clasificación con K optimo")
+    plt.scatter(x[:, 0][y == 0], x[:, 1][y == 0], s=4, c='red')
+    plt.scatter(x[:, 0][y == 1], x[:, 1][y == 1], s=4, c='blue')
+    plt.scatter(x[:, 0][y == 2], x[:, 1][y == 2], s=4, c='g')
+    plt.scatter(x[:, 0][y == -100], x[:, 1][y == -100], s=4, c='orange')
+    plt.scatter(x[:, 0][y == -1], x[:, 1][y == -1], s=4, c='turquoise')
+    plt.scatter(x[:, 0][y == -2], x[:, 1][y == -2], s=4, c='y')
+    canvas.draw()
 
 
 class Canvas_grafica2(FigureCanvas):
@@ -52,7 +65,7 @@ class Canvas_grafica2(FigureCanvas):
             self.ax.margins(x=0)
             self.controller = controller
             print("data desde vista grafics init", self.controller.get_point())
-            self.grafica_datos()
+            grafica_datos1(self,self.controller.get_point())
 
         def grafica_datos(self):
             # grafica el resultado del algoritmo
@@ -66,6 +79,8 @@ class Canvas_grafica2(FigureCanvas):
             self.draw()
 
 
+
+
 class Canvas_grafica(FigureCanvas):
 
     def __init__(self, controller, parent=None):
@@ -74,7 +89,7 @@ class Canvas_grafica(FigureCanvas):
         self.ax.grid()
         self.ax.margins(x=0)
         self.controller = controller
-        self.grafica_datos()
+        grafica_datos1(self,self.controller.get_point_to_plot())
 
 
     def grafica_datos(self):
@@ -84,9 +99,12 @@ class Canvas_grafica(FigureCanvas):
         x = data[:, [0, 1, 2]]
         y = data[:, -1].astype(int)
         plt.title("Clasificación con K optimo")
-        self.ax.scatter(x[:, 0][y == 0], x[:, 1][y == 0], s=3, c='r')
-        self.ax.scatter(x[:, 0][y == 1], x[:, 1][y == 1], s=3, c='b')
-        self.ax.scatter(x[:, 0][y == 2], x[:, 1][y == 2], s=3, c='y')
+        plt.scatter(x[:, 0][y == 0], x[:, 1][y == 0], s=4, c='red')
+        plt.scatter(x[:, 0][y == 1], x[:, 1][y == 1], s=4, c='blue')
+        plt.scatter(x[:, 0][y == 2], x[:, 1][y == 2], s=4, c='g')
+        plt.scatter(x[:, 0][y == -100], x[:, 1][y == -100], s=4, c='orange')
+        plt.scatter(x[:, 0][y == -1], x[:, 1][y == -1], s=4, c='turquoise')
+        plt.scatter(x[:, 0][y == -2], x[:, 1][y == -2], s=4, c='y')
         self.draw()
 
     def get_koptim(self):
