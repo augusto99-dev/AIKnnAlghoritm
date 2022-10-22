@@ -84,7 +84,7 @@ class KnnController:
         array_of_k_elements = [neighbors[i] for i in range_k]
         #print('primeros k elementos: ', array_of_k_elements)
 
-        for i in range(k):
+        for i in range(0, k):
             if neighbors[i][1] != 0:  # not division by zero
                 # print('div: ', 1/neighbors[i][1])
                 # print('el divisor: ', neighbors[i][1])
@@ -105,8 +105,11 @@ class KnnController:
             return 2
         elif class_1 > class_0 and class_1 > class_2:
             return 1
-        else:
+        elif class_0 > class_1 and class_0 > class_2:
             return 0
+        else:
+            return 1
+
 
     def get_class_ponderated_old_2(self, neighbors: list, k):
         class_0 = 0
