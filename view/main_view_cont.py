@@ -26,14 +26,27 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.tableWidget.setColumnWidth(2, 100)
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setHorizontalHeaderLabels(("X", "Y", "CLASE"))
+        self.k_slider.valueChanged.connect(self.label_value.setNum)
+        self.label_value.setText("0")
+        self.checkBox.stateChanged.connect(self.checked_item)
+        self.k_slider.setEnabled(False)
+        self.label_value.setEnabled(False)
         self.controller = KnnController()
         self.grafica = None
         self.dataset = None
         self.dataset_points = None
         self.mutex = QMutex()
 
+    def checked_item(self):
+        if self.k_slider.isEnabled():
+            self.k_slider.setEnabled(False)
+            self.label_value.setEnabled(False)
+        else:
+            self.k_slider.setEnabled(True)
+            self.label_value.setEnabled(True)
+
     def run_alg(self):
-        self.controller.run_algorith(self.get_file())
+        self.controller.run_algorith(self.get_file(),int(self.label_value.text()))
         self.grafica1 = Canvas_grafica(self.controller)
         self.grafico1.addWidget(self.grafica1)
         self.grafica2 = Canvas_grafica2(self.controller)

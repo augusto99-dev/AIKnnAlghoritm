@@ -17,11 +17,17 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
+      <x>20</x>
+      <y>-30</y>
       <width>911</width>
-      <height>671</height>
+      <height>771</height>
      </rect>
+    </property>
+    <property name="accessibleName">
+     <string/>
+    </property>
+    <property name="accessibleDescription">
+     <string/>
     </property>
     <property name="currentIndex">
      <number>0</number>
@@ -67,18 +73,86 @@
        </property>
       </column>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QWidget" name="verticalLayoutWidget_5">
       <property name="geometry">
        <rect>
-        <x>540</x>
-        <y>50</y>
-        <width>151</width>
-        <height>41</height>
+        <x>440</x>
+        <y>40</y>
+        <width>251</width>
+        <height>441</height>
        </rect>
       </property>
-      <property name="text">
-       <string>Correr Algoritmo</string>
-      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCheckBox" name="checkBox">
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Seleccionar valor de k</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="k_slider">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="accessibleDescription">
+          <string/>
+         </property>
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="maximum">
+          <number>15</number>
+         </property>
+         <property name="pageStep">
+          <number>15</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_value">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="font">
+          <font>
+           <family>Bahnschrift Light</family>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="focusPolicy">
+          <enum>Qt::NoFocus</enum>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>Correr Algoritmo</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
@@ -134,33 +208,43 @@
       </property>
       <layout class="QVBoxLayout" name="grafico4"/>
      </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>690</y>
+        <width>241</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>El valor de K optimo es:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="k_value">
+      <property name="geometry">
+       <rect>
+        <x>450</x>
+        <y>690</y>
+        <width>131</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
     </widget>
-   </widget>
-   <widget class="QLabel" name="k_value">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>700</y>
-      <width>131</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>700</y>
-      <width>121</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>El valor de K optimo es:</string>
-    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
