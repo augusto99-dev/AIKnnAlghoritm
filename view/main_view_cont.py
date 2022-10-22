@@ -34,6 +34,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.controller = KnnController()
         self.grafica = None
         self.dataset = None
+        self.grafico_errores = None
         self.dataset_points = None
         self.mutex = QMutex()
 
@@ -51,6 +52,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.grafico1.addWidget(self.grafica1)
         self.grafica2 = Canvas_grafica2(self.controller)
         self.grafico2.addWidget(self.grafica2)
+        self.grafico_errores = GraficoErrores()
+        self.error_layout1.addWidget(self.grafico_errores)
         self.k_value.setText(" "+str(self.grafica1.get_koptim()))
 
     def open_file(self, archivo):
