@@ -35,58 +35,59 @@ def open_file_data(self, path_dataset):
 def get_data_porc(data, porcent):
     rows = []
     cont = 0
-    range_loop = int(len(data)*porcent)
+    range_loop = int(len(data) * porcent)
     for x in range(range_loop):
         rows.append(data[x])
         # print('row: ', row)
-    #print('80 porc of data: ', rows)
+    # print('80 porc of data: ', rows)
     print('tamaño de rows: ', len(rows))
     return rows
 
 
 class Canvas_grafica2(FigureCanvas):
-    def plot_dataset(dataset):
-        def __init__(self, parent=None):     
-            self.fig , self.ax = plt.subplots(1, dpi=100, figsize=(5, 5), 
-                sharey=True, facecolor='white')
-            super().__init__(self.fig) 
-        data = open_file_data(dataset[0])
-        #get_data_porc(data, 0.8)
+        def __init__(self,controller, parent=None):
+            self.fig, self.ax = plt.subplots(facecolor='gray')
+            super().__init__(self.fig)
+            self.ax.grid()
+            self.ax.margins(x=0)
+            self.controller = controller
+            print("data desde vista grafics init", self.controller.get_point())
+            self.grafica_datos()
 
-        #for x in range(len(data)):
+        def grafica_datos(self):
+            # grafica el resultado del algoritmo
+            data = self.controller.get_point()
+            print("data desde vista grafics", data)
+            x = data[:, [0, 1, 2]]
+            y = data[:, -1].astype(int)
+            plt.title("Clasificación con K optimo")
+            self.ax.scatter(x[:, 0][y == 0], x[:, 1][y == 0], s=3, c='r')
+            self.ax.scatter(x[:, 0][y == 1], x[:, 1][y == 1], s=3, c='b')
+            self.ax.scatter(x[:, 0][y == 2], x[:, 1][y == 2], s=3, c='y')
+            self.draw()
 
-
-        x = data[:, [0, 1,2]]
-        y = data[:, -1].astype(int)
-
-        print('La data: ', data)
-
-
-
-        plt.scatter(x[:, 0][y == 0], x[:, 1][y == 0], s=3, c='r')
-        plt.scatter(x[:, 0][y == 1], x[:, 1][y == 1], s=3, c='b')
-        plt.scatter(x[:, 0][y == 2], x[:, 1][y == 2], s=3, c='y')
 
 class Canvas_grafica(FigureCanvas):
-    controller = KnnController()
-    def __init__(self,dataset, parent=None):
 
-        self.fig , self.ax = plt.subplots(facecolor='gray')
+    def __init__(self, controller, parent=None):
+        self.fig, self.ax = plt.subplots(facecolor='gray')
         super().__init__(self.fig)
         self.ax.grid()
         self.ax.margins(x=0)
-        self.grafica_datos(dataset)
+        self.controller = controller
+        self.grafica_datos()
 
 
-    def grafica_datos(self ):
-        data = self.controller.data_float
-        print(data)
-        #for x in range(len(data)):
-        x = data[:, [0, 1,2]]
+    def grafica_datos(self):
+
+        data = self.controller.get_point_to_plot()
+        # grafica el resultado del algoritmo
+        x = data[:, [0, 1, 2]]
         y = data[:, -1].astype(int)
-        plt.title("Grafica")
+        plt.title("Clasificación con K optimo")
         self.ax.scatter(x[:, 0][y == 0], x[:, 1][y == 0], s=3, c='r')
         self.ax.scatter(x[:, 0][y == 1], x[:, 1][y == 1], s=3, c='b')
         self.ax.scatter(x[:, 0][y == 2], x[:, 1][y == 2], s=3, c='y')
         self.draw()
+
 

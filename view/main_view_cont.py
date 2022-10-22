@@ -1,3 +1,6 @@
+from PyQt5 import uic
+from PyQt5.QtCore import QMutex
+import sys
 from controller.Controller import KnnController
 from main_view import *
 from Graphics2D import *
@@ -6,13 +9,15 @@ from PyQt5.QtWidgets import QTableWidgetItem
 import csv
 import numpy as np
 
-
+qt_creator_file = "main_view.ui"
+Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_creator_file)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
-    controller = KnnController()
+
     def __init__(self, *args, **kwargs):
         QtWidgets.QMainWindow.__init__(self, *args, **kwargs)
+        Ui_MainWindow.__init__(self)
         self.setupUi(self)
         self.actionAbrir.triggered.connect(self.abrir)
         self.pushButton.clicked.connect(self.run_alg)
@@ -21,15 +26,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.tableWidget.setColumnWidth(2, 100)
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setHorizontalHeaderLabels(("X", "Y", "CLASE"))
+        self.controller = KnnController()
         self.grafica = None
         self.dataset = None
-
+        self.dataset_points = None
+        self.mutex = QMutex()
 
     def run_alg(self):
-        #self.controller.run_algorith(self.get_file())
-        self.grafica = Canvas_grafica(self.get_file())
-        self.grafico1.addWidget(self.grafica)
-        print("asdasdasdas")
+        self.controller.run_algorith(self.get_file())
+        self.grafica1 = Canvas_grafica(self.controller)
+        self.grafico1.addWidget(self.grafica1)
+        self.grafica2 = Canvas_grafica2(self.controller)
+        self.grafico2.addWidget(self.grafica2)
+        #self.k_value.setText(self.grafica1.get_koptim())
+
     def open_file(self, archivo):
         with open(archivo[0], 'r') as file:
             csvreader = csv.reader(file)
@@ -48,9 +58,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 item += 1
                 n += 1
                 item = 0
-            data = np.array(rows)
             file.close()
-            return data
+            return self.dataset
 
     def abrir(self):
         self.dataset = QFileDialog.getOpenFileName(self, 'abrir archivo', 'C:\\')
@@ -58,11 +67,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             data = self.open_file(self.dataset)
         return self.dataset
     def get_file(self):
-       return self.dataset
+        print("ASDADADSAD")
+        return self.dataset[0]
 
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
+    app = QtWidgets.QApplication(sys.argv)
     window = MainWindow()
     window.show()
     app.exec_()

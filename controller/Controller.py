@@ -3,6 +3,7 @@ from math import sqrt
 import numpy as np
 import csv
 
+
 class KnnController:
 
     def __init__(self):
@@ -13,6 +14,9 @@ class KnnController:
                         [-3, -8, 1],
                         [-2, -9, 1],
                         [-4, -7, 1]]
+        self.point_to_plot = None
+        self.points_csv = None
+        self.k_optimo = None
 
         # Struct vector point
         # [x,y,class,distance]
@@ -31,7 +35,7 @@ class KnnController:
         for pair_dataset in dataset:
             distance = self.euclidean_distance(point, pair_dataset)
             self.distances.append((pair_dataset, distance))
-        #print('Vector with distances ::: ', self.distances)
+        # print('Vector with distances ::: ', self.distances)
         self.distances.sort(key=lambda tup: tup[1])
         return self.distances
 
@@ -82,13 +86,13 @@ class KnnController:
         class_2 = 0
         range_k = range(k)
         array_of_k_elements = [neighbors[i] for i in range_k]
-        #print('primeros k elementos: ', array_of_k_elements)
+        # print('primeros k elementos: ', array_of_k_elements)
 
         for i in range(len(neighbors)):
             if neighbors[i][1] != 0:  # not division by zero
-                class_0 += 1/neighbors[i][1] * self.validate_class(0, neighbors[i])
-                class_1 += 1/neighbors[i][1] * self.validate_class(1, neighbors[i])
-                class_2 += 1/neighbors[i][1] * self.validate_class(2, neighbors[i])
+                class_0 += 1 / neighbors[i][1] * self.validate_class(0, neighbors[i])
+                class_1 += 1 / neighbors[i][1] * self.validate_class(1, neighbors[i])
+                class_2 += 1 / neighbors[i][1] * self.validate_class(2, neighbors[i])
 
         print('class 0 quantity: ', class_0)
         print('class 1 quantity: ', class_1)
@@ -144,22 +148,22 @@ class KnnController:
                 if i == j:
                     # guardo distancia que es 0, y su clase [2]
                     matrix_distances[i][j] = [0, data_points[i][2]]
-                    #print('Data point j2 : ', data_points[i][2])
+                    # print('Data point j2 : ', data_points[i][2])
 
                     # matrix_distances[i][j] = 0
                     # print('PRINT AFFTER ERROR: ', matrix_distances[i][j])
                 elif i > j:
                     # copio el valor ya calculado, pero como incluye su clase yo quiero solo la distancia ya que estamos tratando otra columna la clase cambia
                     matrix_distances[i][j] = [matrix_distances[j][i][0], data_points[i][2]]
-                    #print('Data point i > j  : ', matrix_distances[i][j])
+                    # print('Data point i > j  : ', matrix_distances[i][j])
                     # matrix_distances[i][j] = matrix_distances[j][i]
                 else:
                     aux = []
                     aux.append(float(self.euclidean_distance(data_points[i], data_points[j])))
                     aux.append(data_points[i][2])
-                    #matrix_distances[i][j] = [self.euclidean_distance(data_points[i], data_points[j]), data_points[j][2]]
+                    # matrix_distances[i][j] = [self.euclidean_distance(data_points[i], data_points[j]), data_points[j][2]]
                     matrix_distances[i][j] = aux
-                    #print('ELSE I < J: ', matrix_distances[i][j])
+                    # print('ELSE I < J: ', matrix_distances[i][j])
 
                     # matrix_distances[i][j] = self.euclidean_distance(data_points[i], data_points[j])
 
@@ -172,6 +176,7 @@ class KnnController:
         matrix_of_ones = self.build_matrix_of_k(matrix_ordered, len(matrix_distances), len(matrix_distances[0]))
         k = self.get_row_max_k(matrix_of_ones)
         print('K OPTIMO: ', k)
+        return k
 
     def get_row_max_k(self, matrix):
         result = []
@@ -185,15 +190,14 @@ class KnnController:
             # print('Suma fila: ', sum_aux)
         print('Array de k values rows: ', np.array(result))
         tmp = max(result)
-        k = result.index(tmp) + 1 # + 1 porque usamos los indices de arreglos!
+        k = result.index(tmp) + 1  # + 1 porque usamos los indices de arreglos!
         print('Valor maximo: ', tmp)
         print('K Optimo:::: ', k)
 
-        #my_list = [10, 72, 54, 25, 73, 40]
+        # my_list = [10, 72, 54, 25, 73, 40]
         max_item = max(result)
         print(f'Max index is : {result.index(max_item)}')
         return k
-
 
     def build_matrix_of_k(self, matrix_ordered, R, C):
         # matriz con una fila menos
@@ -209,7 +213,7 @@ class KnnController:
             # obtengo la clase dueña de la columna
             item_owner = values.pop()
             for i in range(1, R):
-            #for i = 1 in range(R):
+                # for i = 1 in range(R):
                 # print('ITERATOR: ', i)
                 # obtengo la clase
                 item = values.pop()
@@ -229,7 +233,7 @@ class KnnController:
                 if c0 > c1 and c0 > c2:
                     if int(item_owner[1]) == 0:
                         # print('Cargo 1 en la matrix, gano c0')
-                        res[i-1][col] = 1
+                        res[i - 1][col] = 1
                     else:
                         # print('Cargo 0 en la matrix porque la clase 1 no gano y aca comparo por la clase 1.')
                         res[i - 1][col] = 0
@@ -255,7 +259,6 @@ class KnnController:
             c2 = 0
         print('Final matrix:: ', np.array(res))
         return res
-
 
     def order_matrix_by_column(self, matrix, R, C):
         res = [[0] * C for _ in range(R)]
@@ -324,32 +327,32 @@ class KnnController:
         print('Errors quantity: ', errors)
         return errors
 
-
-    def run_algorith(self):
-        data = self.open_file_data('dataset1.csv')
-        print('Data leida CSV: ', data)
+    def run_algorith(self, path_dataset):
+        data = self.open_file_data(path_dataset)
+        self.points_csv = data
         # print('Data 1: ', data[0])
         # [-5. -2.  0.]
 
         #############################################################
         # Funca: 1- K optimo entre 1 y 15
-        #############################################################
-        # k_optim = self.get_k_optim(data)
+        ############################################################
+        k_optim = self.get_k_optim(data)
+        # point_unknowkn = [2, 1]
 
-        #point_unknowkn = [2, 1]
-
-        #neighbors = self.get_neighbors(point_unknowkn, self.dataset)
-        #print('neighbors quantity: ', len(neighbors))
-        #class_result = self.get_class(neighbors, 3)
-        #print('Clasifica como clase: ', class_result)
+        # neighbors = self.get_neighbors(point_unknowkn, self.dataset)
+        # print('neighbors quantity: ', len(neighbors))
+        # class_result = self.get_class(neighbors, 3)
+        # print('Clasifica como clase: ', class_result)
 
         # test_data = self.get_test_values(data)
 
         #############################################################
-        #Funca: 2- Evaluar la clasificacion utilizando el k optimo obtenido
+        # Funca: 2- Evaluar la clasificacion utilizando el k optimo obtenido
         #############################################################
-        #dataset, dataset, k
-        result_points_plot = self.exec_data_knn(data, data, 5)
+        # dataset, dataset, k
+        result_points_plot = self.exec_data_knn(data, data, 6)
+        print("escribio")
+        self.point_to_plot = np.array(result_points_plot)
         return np.array(result_points_plot)
 
         #############################################################
@@ -363,16 +366,13 @@ class KnnController:
         #     quantity_errors_ponderated = 0
         # print('Errors Array in k ponderated: ', np.array(errors_array_in_k_ponderated))
 
-
         # print('lista de vecinos: ', neighbors)
-        #classif = self.get_class_ponderated(neighbors)
+        # classif = self.get_class_ponderated(neighbors)
         # print('THE CLASS CLASSIFIED TO UNKNOWN POINT IS: ', classif)
-
-
 
     def open_file_data(self, filename):
         # file = open('../datasets/' + filename)
-        file = open('./datasets/' + filename)
+        file = open(filename)
         type(file)
         csvreader = csv.reader(file)
         header = []
@@ -387,3 +387,10 @@ class KnnController:
         data = np.array(rows)
         data_float = data.astype(float)
         return data_float
+
+    def get_point_to_plot(self):
+        return self.point_to_plot
+    def get_point(self):
+        return self.points_csv
+    def get_k_optim(self):
+        return self.k_optimo

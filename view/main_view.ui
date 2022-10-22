@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>804</width>
-    <height>609</height>
+    <width>943</width>
+    <height>808</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>801</width>
-      <height>561</height>
+      <width>911</width>
+      <height>671</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -94,9 +94,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>10</y>
-        <width>391</width>
-        <height>291</height>
+        <y>40</y>
+        <width>451</width>
+        <height>301</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="grafico1"/>
@@ -104,15 +104,63 @@
      <widget class="QWidget" name="verticalLayoutWidget_2">
       <property name="geometry">
        <rect>
-        <x>400</x>
-        <y>10</y>
-        <width>401</width>
-        <height>291</height>
+        <x>460</x>
+        <y>40</y>
+        <width>451</width>
+        <height>301</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="grafico1_2"/>
+      <layout class="QVBoxLayout" name="grafico2"/>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>340</y>
+        <width>451</width>
+        <height>301</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="grafico3"/>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_4">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>340</y>
+        <width>451</width>
+        <height>301</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="grafico4"/>
      </widget>
     </widget>
+   </widget>
+   <widget class="QLabel" name="k_value">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>700</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>700</y>
+      <width>121</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>El valor de K optimo es:</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -120,7 +168,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>804</width>
+     <width>943</width>
      <height>21</height>
     </rect>
    </property>
