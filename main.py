@@ -20,8 +20,8 @@ def print_hi(name):
 if __name__ == '__main__':
     #pass
     controller = KnnController()
-    controller.run_algorith('asd')
-    #graphics = Graphics()
+    graphics = Graphics()
+    array_data = controller.run_algorith()
     #print('resulttttt. ', array_data)
 
     #graphics.plot_dataset(array_data)
