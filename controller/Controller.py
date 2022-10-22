@@ -347,6 +347,7 @@ class KnnController:
 
     def exec_data_knn_ponderated(self, data_test, matrix, k):
         errors = 0
+        matrix_result = []
         #for i in range(len(data_test)):
         # aca el range seria el tamaño de la matriz (Todos contra todos!)
         for i in range(len(data_test)):
@@ -356,12 +357,26 @@ class KnnController:
             print('punto a clasificar:: ', matrix[i])
             print('Clasifica como clase: ', class_result)
             print('Sin embargo era de clase:: ', matrix[i][2])
+
+            # aca appendear el array nuevo con sus colores si hay errores.
+            # ...
+            if int(class_result) != matrix[i][2]:
+                point_failed = copy.deepcopy(matrix[i])
+                if class_result == 0:
+                    point_failed[2] = -100
+                else:
+                    point_failed[2] = point_failed[2] * -1
+                print('point failed: ', point_failed)
+                matrix_result.append(point_failed)
+            else:
+                matrix_result.append(matrix[i])
+
             if int(class_result) != int(matrix[i][2]):
                 # contar los errores
                 errors += 1
             neighbors.clear()
         print('Errors quantity: ', errors)
-        return errors
+        return matrix_result
 
 
     def run_algorith(self):
@@ -399,13 +414,14 @@ class KnnController:
         # para cada k hasta 15 (Pasar k al range) la vista necesita la clasificacion entera de cada k
         # pasar k
         k = 5
-        for i in range(0,k):
-            quantity_errors_ponderated = self.exec_data_knn_ponderated(data, data, i)
-            errors_array_in_k_ponderated.append(quantity_errors_ponderated)
-            quantity_errors_ponderated = 0
-        print('Errors Array in k ponderated: ', np.array(errors_array_in_k_ponderated))
-
-
+        #for i in range(0,k):
+        #    quantity_errors_ponderated = self.exec_data_knn_ponderated(data, data, i)
+        #    errors_array_in_k_ponderated.append(quantity_errors_ponderated)
+        #    quantity_errors_ponderated = 0
+        # print('Errors Array in k ponderated: ', np.array(errors_array_in_k_ponderated))
+        data_a_plotear = self.exec_data_knn_ponderated(data, data, 1)
+        print('data a plotear: ', data_a_plotear)
+        return np.array(data_a_plotear)
         # print('lista de vecinos: ', neighbors)
         #classif = self.get_class_ponderated(neighbors)
         # print('THE CLASS CLASSIFIED TO UNKNOWN POINT IS: ', classif)

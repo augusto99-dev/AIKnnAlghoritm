@@ -19,7 +19,7 @@ if __name__ == '__main__':
     array_data = controller.run_algorith()
     #print('resulttttt. ', array_data)
 
-    #graphics.plot_dataset(array_data)
+    graphics.plot_dataset(array_data)
 
 
 
