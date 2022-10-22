@@ -4,11 +4,10 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 from math import sqrt
 
-from pyqt5_plugins.examplebutton import QtWidgets
-
 from controller.Controller import KnnController
 #from view.Graphics2DTest import Graphics
 #from view.main_view_cont import MainWindow
+from view.Graphics2DTest import Graphics
 
 
 def print_hi(name):
@@ -24,7 +23,7 @@ if __name__ == '__main__':
     array_data = controller.run_algorith()
     #print('resulttttt. ', array_data)
 
-    #graphics.plot_dataset(array_data)
+    graphics.plot_dataset(array_data)
 
 
 

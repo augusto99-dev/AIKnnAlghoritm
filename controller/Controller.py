@@ -384,7 +384,7 @@ class KnnController:
         print('Errors quantity: ', errors)
         return matrix_result
 
-    def run_algorith(self, path_dataset):
+    def run_algorith(self, path_dataset, k):
         data = self.open_file_data(path_dataset)
         #data = self.open_file_data('dataset1.csv')
         self.points_csv = data
