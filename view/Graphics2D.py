@@ -57,10 +57,9 @@ class Canvas_grafica2(FigureCanvas):
         def grafica_datos(self):
             # grafica el resultado del algoritmo
             data = self.controller.get_point()
-            print("data desde vista grafics", data)
             x = data[:, [0, 1, 2]]
             y = data[:, -1].astype(int)
-            plt.title("Clasificación con K optimo")
+            plt.title("Dataset Original")
             self.ax.scatter(x[:, 0][y == 0], x[:, 1][y == 0], s=3, c='r')
             self.ax.scatter(x[:, 0][y == 1], x[:, 1][y == 1], s=3, c='b')
             self.ax.scatter(x[:, 0][y == 2], x[:, 1][y == 2], s=3, c='y')
@@ -89,5 +88,8 @@ class Canvas_grafica(FigureCanvas):
         self.ax.scatter(x[:, 0][y == 1], x[:, 1][y == 1], s=3, c='b')
         self.ax.scatter(x[:, 0][y == 2], x[:, 1][y == 2], s=3, c='y')
         self.draw()
+
+    def get_koptim(self):
+        return self.controller.get_k_optim_value_from_controller()
 
 

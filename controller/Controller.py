@@ -138,7 +138,7 @@ class KnnController:
         # else:
         #     return 0
 
-    def get_k_optim(self, data_points: list):
+    def get_k_optim(self, data_points):
         print('El dataset: ', data_points)
         quantity_points = len(data_points)
         # declarando la matrix nxn
@@ -329,6 +329,7 @@ class KnnController:
 
     def run_algorith(self, path_dataset):
         data = self.open_file_data(path_dataset)
+        #data = self.open_file_data('dataset1.csv')
         self.points_csv = data
         # print('Data 1: ', data[0])
         # [-5. -2.  0.]
@@ -336,7 +337,8 @@ class KnnController:
         #############################################################
         # Funca: 1- K optimo entre 1 y 15
         ############################################################
-        k_optim = self.get_k_optim(data)
+
+        self.k_optimo = self.get_k_optim(data)
         # point_unknowkn = [2, 1]
 
         # neighbors = self.get_neighbors(point_unknowkn, self.dataset)
@@ -350,7 +352,7 @@ class KnnController:
         # Funca: 2- Evaluar la clasificacion utilizando el k optimo obtenido
         #############################################################
         # dataset, dataset, k
-        result_points_plot = self.exec_data_knn(data, data, 6)
+        result_points_plot = self.exec_data_knn(data, data, self.k_optimo)
         print("escribio")
         self.point_to_plot = np.array(result_points_plot)
         return np.array(result_points_plot)
@@ -371,7 +373,7 @@ class KnnController:
         # print('THE CLASS CLASSIFIED TO UNKNOWN POINT IS: ', classif)
 
     def open_file_data(self, filename):
-        # file = open('../datasets/' + filename)
+        #file = open('../datasets/' + filename)
         file = open(filename)
         type(file)
         csvreader = csv.reader(file)
@@ -392,5 +394,5 @@ class KnnController:
         return self.point_to_plot
     def get_point(self):
         return self.points_csv
-    def get_k_optim(self):
+    def get_k_optim_value_from_controller(self):
         return self.k_optimo

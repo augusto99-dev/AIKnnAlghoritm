@@ -38,7 +38,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.grafico1.addWidget(self.grafica1)
         self.grafica2 = Canvas_grafica2(self.controller)
         self.grafico2.addWidget(self.grafica2)
-        #self.k_value.setText(self.grafica1.get_koptim())
+        self.k_value.setText(str(self.grafica1.get_koptim()))
 
     def open_file(self, archivo):
         with open(archivo[0], 'r') as file:

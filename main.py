@@ -7,8 +7,8 @@ from math import sqrt
 from pyqt5_plugins.examplebutton import QtWidgets
 
 from controller.Controller import KnnController
-from view.Graphics2DTest import Graphics
-from view.main_view_cont import MainWindow
+#from view.Graphics2DTest import Graphics
+#from view.main_view_cont import MainWindow
 
 
 def print_hi(name):
@@ -18,8 +18,9 @@ def print_hi(name):
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    pass
-    #controller = KnnController()
+    #pass
+    controller = KnnController()
+    controller.run_algorith('asd')
     #graphics = Graphics()
     #print('resulttttt. ', array_data)
 
