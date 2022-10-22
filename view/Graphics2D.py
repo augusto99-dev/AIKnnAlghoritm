@@ -42,12 +42,12 @@ def get_data_porc(data, porcent):
     # print('80 porc of data: ', rows)
     print('tamaño de rows: ', len(rows))
     return rows
-def grafica_datos1(canvas,data):
+def grafica_datos1(canvas,data,title):
     #data = self.controller.get_point_to_plot()
     # grafica el resultado del algoritmo
     x = data[:, [0, 1, 2]]
     y = data[:, -1].astype(int)
-    plt.title("Clasificación con K optimo")
+    plt.title(title)
     plt.scatter(x[:, 0][y == 0], x[:, 1][y == 0], s=4, c='red')
     plt.scatter(x[:, 0][y == 1], x[:, 1][y == 1], s=4, c='blue')
     plt.scatter(x[:, 0][y == 2], x[:, 1][y == 2], s=4, c='g')
@@ -65,7 +65,7 @@ class Canvas_grafica2(FigureCanvas):
             self.ax.margins(x=0)
             self.controller = controller
             print("data desde vista grafics init", self.controller.get_point())
-            grafica_datos1(self,self.controller.get_point())
+            grafica_datos1(self,self.controller.get_point(),"Dataset Original")
 
         def grafica_datos(self):
             # grafica el resultado del algoritmo
@@ -89,7 +89,7 @@ class Canvas_grafica(FigureCanvas):
         self.ax.grid()
         self.ax.margins(x=0)
         self.controller = controller
-        grafica_datos1(self,self.controller.get_point_to_plot())
+        grafica_datos1(self,self.controller.get_point_to_plot(),"Clasificación con K optimo")
 
 
     def grafica_datos(self):
