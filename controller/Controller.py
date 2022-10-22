@@ -84,15 +84,51 @@ class KnnController:
         array_of_k_elements = [neighbors[i] for i in range_k]
         #print('primeros k elementos: ', array_of_k_elements)
 
+        for i in range(k):
+            if neighbors[i][1] != 0:  # not division by zero
+                # print('div: ', 1/neighbors[i][1])
+                # print('el divisor: ', neighbors[i][1])
+                # print('mult. por clase 0 ', self.validate_class(0, neighbors[i]))
+                class_0 += 1/neighbors[i][1] * self.validate_class(0, neighbors[i])
+                class_1 += 1/neighbors[i][1] * self.validate_class(1, neighbors[i])
+                class_2 += 1/neighbors[i][1] * self.validate_class(2, neighbors[i])
+            print('class 0 quantity: ', class_0)
+            print('class 1 quantity: ', class_1)
+            print('class 2 quantity: ', class_2)
+
+
+        #print('class 0 quantity: ', class_0)
+        #print('class 1 quantity: ', class_1)
+        #print('class 2 quantity: ', class_2)
+
+        if class_2 > class_1 and class_2 > class_0:
+            return 2
+        elif class_1 > class_0 and class_1 > class_2:
+            return 1
+        else:
+            return 0
+
+    def get_class_ponderated_old_2(self, neighbors: list, k):
+        class_0 = 0
+        class_1 = 0
+        class_2 = 0
+        range_k = range(k)
+        array_of_k_elements = [neighbors[i] for i in range_k]
+        #print('primeros k elementos: ', array_of_k_elements)
+
         for i in range(len(neighbors)):
             if neighbors[i][1] != 0:  # not division by zero
                 class_0 += 1/neighbors[i][1] * self.validate_class(0, neighbors[i])
                 class_1 += 1/neighbors[i][1] * self.validate_class(1, neighbors[i])
                 class_2 += 1/neighbors[i][1] * self.validate_class(2, neighbors[i])
+            print('class 0 quantity: ', class_0)
+            print('class 1 quantity: ', class_1)
+            print('class 2 quantity: ', class_2)
 
-        print('class 0 quantity: ', class_0)
-        print('class 1 quantity: ', class_1)
-        print('class 2 quantity: ', class_2)
+
+        #print('class 0 quantity: ', class_0)
+        #print('class 1 quantity: ', class_1)
+        #print('class 2 quantity: ', class_2)
 
         if class_0 > class_1 and class_0 > class_2:
             return 0
@@ -311,10 +347,13 @@ class KnnController:
 
     def exec_data_knn_ponderated(self, data_test, matrix, k):
         errors = 0
+        #for i in range(len(data_test)):
+        # aca el range seria el tamaño de la matriz (Todos contra todos!)
         for i in range(len(data_test)):
             neighbors = self.get_neighbors(data_test[i], matrix)
-            print('neighbors quantity: ', len(neighbors))
+            print('neighbors quantity: ', np.array(neighbors))
             class_result = self.get_class_ponderated(neighbors, k)
+            print('punto a clasificar:: ', matrix[i])
             print('Clasifica como clase: ', class_result)
             print('Sin embargo era de clase:: ', matrix[i][2])
             if int(class_result) != int(matrix[i][2]):
@@ -349,19 +388,22 @@ class KnnController:
         #Funca: 2- Evaluar la clasificacion utilizando el k optimo obtenido
         #############################################################
         #dataset, dataset, k
-        result_points_plot = self.exec_data_knn(data, data, 5)
-        return np.array(result_points_plot)
+        #result_points_plot = self.exec_data_knn(data, data, 5)
+        #return np.array(result_points_plot)
 
         #############################################################
         # Process: 3- Obtener la mejor clasificacion utilizando knn ponderado para un rango de [1-15]
         #############################################################
         # dataset, dataset, k
-        # errors_array_in_k_ponderated = []
-        # for i in range(0,15):
-        #     quantity_errors_ponderated = self.exec_data_knn_ponderated(data, data, i)
-        #     errors_array_in_k_ponderated.append(quantity_errors_ponderated)
-        #     quantity_errors_ponderated = 0
-        # print('Errors Array in k ponderated: ', np.array(errors_array_in_k_ponderated))
+        errors_array_in_k_ponderated = []
+        # para cada k hasta 15 (Pasar k al range) la vista necesita la clasificacion entera de cada k
+        # pasar k
+        k = 5
+        for i in range(0,k):
+            quantity_errors_ponderated = self.exec_data_knn_ponderated(data, data, i)
+            errors_array_in_k_ponderated.append(quantity_errors_ponderated)
+            quantity_errors_ponderated = 0
+        print('Errors Array in k ponderated: ', np.array(errors_array_in_k_ponderated))
 
 
         # print('lista de vecinos: ', neighbors)

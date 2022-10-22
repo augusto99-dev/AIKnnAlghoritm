@@ -17,9 +17,9 @@ if __name__ == '__main__':
     controller = KnnController()
     graphics = Graphics()
     array_data = controller.run_algorith()
-    print('resulttttt. ', array_data)
+    #print('resulttttt. ', array_data)
 
-    graphics.plot_dataset(array_data)
+    #graphics.plot_dataset(array_data)
 
 
 
