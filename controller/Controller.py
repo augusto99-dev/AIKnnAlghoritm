@@ -79,6 +79,13 @@ class KnnController:
             return 1
         else:
             return 0
+    # cambia el formato que llega la data
+    def validate_class_of_ponderated(self, class_eval, class_target):
+        # print('class taget: ', class_target[0][2])
+        if (class_eval == class_target):
+            return 1
+        else:
+            return 0
 
     def get_class_ponderated(self, neighbors: list, k):
         class_0 = 0
@@ -217,6 +224,50 @@ class KnnController:
         print('K OPTIMO: ', k)
         return k
 
+    def get_k_optim_ponderated(self, data_points):
+        matrix_ordered = self.get_matrix_of_distances_ordered(data_points)
+        print('Matriz ordenada: ', np.array(matrix_ordered))
+        # segundo parametro (len(matrix_distances)) parametro es el k variable
+        matrix_of_ones = self.build_matrix_of_k_pondered(matrix_ordered, len(matrix_ordered), len(matrix_ordered[0]))
+        k = self.get_row_max_k(matrix_of_ones)
+        print('K OPTIMO: ', k)
+        return k
+
+    def get_matrix_of_distances_ordered(self, data_points):
+        print('El dataset: ', data_points)
+        quantity_points = len(data_points)
+        # declarando la matrix nxn
+        matrix_distances = [[0 for x in range(quantity_points)] for y in range(quantity_points)]
+        for i in range(len(data_points)):
+            for j in range(len(data_points)):
+                if i == j:
+                    # guardo distancia que es 0, y su clase [2]
+                    matrix_distances[i][j] = [0, data_points[i][2]]
+                    # print('Data point j2 : ', data_points[i][2])
+
+                    # matrix_distances[i][j] = 0
+                    # print('PRINT AFFTER ERROR: ', matrix_distances[i][j])
+                elif i > j:
+                    # copio el valor ya calculado, pero como incluye su clase yo quiero solo la distancia ya que estamos tratando otra columna la clase cambia
+                    matrix_distances[i][j] = [matrix_distances[j][i][0], data_points[i][2]]
+                    # print('Data point i > j  : ', matrix_distances[i][j])
+                    # matrix_distances[i][j] = matrix_distances[j][i]
+                else:
+                    aux = []
+                    aux.append(float(self.euclidean_distance(data_points[i], data_points[j])))
+                    aux.append(data_points[i][2])
+                    # matrix_distances[i][j] = [self.euclidean_distance(data_points[i], data_points[j]), data_points[j][2]]
+                    matrix_distances[i][j] = aux
+                    # print('ELSE I < J: ', matrix_distances[i][j])
+
+                    # matrix_distances[i][j] = self.euclidean_distance(data_points[i], data_points[j])
+
+        print('The matrix of distances: ', np.array(matrix_distances))
+        # Hasta aqui la matriz de distancias
+        matrix_ordered = self.order_matrix_by_column(matrix_distances, len(matrix_distances), len(matrix_distances[0]))
+        return matrix_ordered
+
+
     def get_row_max_k(self, matrix):
         result = []
         for i in range(len(matrix)):
@@ -298,6 +349,77 @@ class KnnController:
             c2 = 0
         print('Final matrix:: ', np.array(res))
         return res
+
+    def build_matrix_of_k_pondered(self, matrix_ordered, R, C):
+        # matriz con una fila menos
+        res = [[0] * C for _ in range(R - 1)]
+        c0 = 0
+        c1 = 0
+        c2 = 0
+        for col in range(C):
+            values = [r[col] for r in matrix_ordered]
+            values.sort(key=lambda s: s[0], reverse=True)
+            # print('VALUES ordenada en teoria para comparar los c0 y c1: ', values)
+            # print('columna::::: ', col)
+            # obtengo la clase dueña de la columna (sera 0 la distancia a si mismo)
+            item_owner = values.pop()
+            print('item Owner: ', item_owner)
+            for i in range(1, R):
+                # for i = 1 in range(R):
+                # print('ITERATOR: ', i)
+                # obtengo la clase
+                item = values.pop()
+                print('item..... ', item)
+                # print('The Class in matrix ordered: ', item[1])
+                # print('div: ', 1/neighbors[i][1])
+                # print('el divisor: ', neighbors[i][1])
+                # print('mult. por clase 0 ', self.validate_class(0, neighbors[i]))
+                c0 += (1 / (item[0] ** 2)) * self.validate_class_of_ponderated(0, item[1])
+                c1 += (1 / (item[0] ** 2)) * self.validate_class_of_ponderated(1, item[1])
+                c2 += (1 / (item[0] ** 2)) * self.validate_class_of_ponderated(2, item[1])
+
+                #if int(item[1]) == 0:
+                #    c0 += 1
+                #elif int(item[1]) == 1:
+                #    c1 += 1
+                #elif int(item[1]) == 2:
+                #    c2 += 1
+                #else:
+                #    print('no deberia llegar aqui')
+                # print('Hasta el momento: ')
+                print('c0: ', c0)
+                print('c1: ', c1)
+                print('c2: ', c2)
+                if c0 > c1 and c0 > c2:
+                    if int(item_owner[1]) == 0:
+                        print('Cargo 1 en la matrix, gano c0')
+                        res[i - 1][col] = 1
+                    else:
+                        print('Cargo 0 en la matrix porque la clase 1 no gano y aca comparo por la clase 1.')
+                        res[i - 1][col] = 0
+                elif c0 < c1 and c2 < c1:
+                    if int(item_owner[1]) == 1:
+                        print('Cargo 1 en la matrix, gano c1')
+                        res[i - 1][col] = 1
+                    else:
+                        print('Cargo 0 en la matrix porque la c0 o c1 gano y aca comparo por la clase 1.')
+                        res[i - 1][col] = 0
+                elif c2 > c1 and c2 > c0:
+                    if int(item_owner[1]) == 2:
+                        print('Cargo 1 en la matrix gano c2.')
+                        res[i - 1][col] = 1
+                    else:
+                        print('Cargo 0 en la matrix porque la clase c2 no gano y aca comparo por la clase 2.')
+                        res[i - 1][col] = 0
+                else:
+                    # Aca cuando no se puede decidir por ser iguales.
+                    res[i - 1][col] = 0
+            c0 = 0
+            c1 = 0
+            c2 = 0
+        print('Final matrix:: ', np.array(res))
+        return res
+
 
     def order_matrix_by_column(self, matrix, R, C):
         res = [[0] * C for _ in range(R)]
@@ -410,16 +532,16 @@ class KnnController:
         # Funca: 2- Evaluar la clasificacion utilizando el k optimo obtenido
         #############################################################
         # dataset, dataset, k
-        #if k == 0:
-        #    result_points_plot = self.exec_data_knn(data, data, self.k_optimo)
-        #    print("escribio")
-        #    self.point_to_plot = np.array(result_points_plot)
-        #    return np.array(result_points_plot)
-        #else:
-        #    result_points_plot = self.exec_data_knn(data, data, k)
-        #    print("escribio")
-        #    self.point_to_plot = np.array(result_points_plot)
-        #    return np.array(result_points_plot)
+        if k == 0:
+            result_points_plot = self.exec_data_knn(data, data, self.k_optimo)
+            print("escribio")
+            self.point_to_plot = np.array(result_points_plot)
+            return np.array(result_points_plot)
+        else:
+            result_points_plot = self.exec_data_knn(data, data, k)
+            print("escribio")
+            self.point_to_plot = np.array(result_points_plot)
+            return np.array(result_points_plot)
 
         #############################################################
         # Process: 3- Obtener la mejor clasificacion utilizando knn ponderado para un rango de [1-15]
@@ -427,7 +549,7 @@ class KnnController:
         # dataset, dataset, k
         # para cada k hasta 15 (Pasar k al range) la vista necesita la clasificacion entera de cada k
         # pasar k
-        self.get_errors_in_k_ponderated(data, k)
+        #self.get_errors_in_k_ponderated(data, k)
         #data_a_plotear = self.exec_data_knn_ponderated(data, data, k)
         #print('data a plotear: ', data_a_plotear)
         #return np.array(data_a_plotear)
@@ -435,6 +557,18 @@ class KnnController:
         # classif = self.get_class_ponderated(neighbors)
         # print('THE CLASS CLASSIFIED TO UNKNOWN POINT IS: ', classif)
         return np.array(data)
+
+    ########
+    # Usar esto para obtener el k optimo ponderado
+    ########
+    def run_algorithm_of_k_optim_ponderated(self, path, k):
+        data = self.open_file_data(path)
+        k_optim = self.get_k_optim_ponderated(data)
+        print('K Optimo poderated: ', k_optim)
+        #self  .get_errors_in_k_ponderated(data, k)
+
+    def run_algorithm_aug(self, path, k):
+        pass
 
     def get_errors_in_k_ponderated(self, data, k):
         errors_array_in_k_ponderated = []
