@@ -382,7 +382,8 @@ class KnnController:
                 errors += 1
             neighbors.clear()
         print('Errors quantity: ', errors)
-        return matrix_result
+        #return matrix_result
+        return errors
 
     def run_algorith(self, path_dataset, k):
         data = self.open_file_data(path_dataset)
@@ -409,35 +410,40 @@ class KnnController:
         # Funca: 2- Evaluar la clasificacion utilizando el k optimo obtenido
         #############################################################
         # dataset, dataset, k
-        if k == 0:
-            result_points_plot = self.exec_data_knn(data, data, self.k_optimo)
-            print("escribio")
-            self.point_to_plot = np.array(result_points_plot)
-            return np.array(result_points_plot)
-        else:
-            result_points_plot = self.exec_data_knn(data, data, k)
-            print("escribio")
-            self.point_to_plot = np.array(result_points_plot)
-            return np.array(result_points_plot)
+        #if k == 0:
+        #    result_points_plot = self.exec_data_knn(data, data, self.k_optimo)
+        #    print("escribio")
+        #    self.point_to_plot = np.array(result_points_plot)
+        #    return np.array(result_points_plot)
+        #else:
+        #    result_points_plot = self.exec_data_knn(data, data, k)
+        #    print("escribio")
+        #    self.point_to_plot = np.array(result_points_plot)
+        #    return np.array(result_points_plot)
 
         #############################################################
         # Process: 3- Obtener la mejor clasificacion utilizando knn ponderado para un rango de [1-15]
         #############################################################
         # dataset, dataset, k
-        errors_array_in_k_ponderated = []
         # para cada k hasta 15 (Pasar k al range) la vista necesita la clasificacion entera de cada k
         # pasar k
-        #for i in range(0,k):
-        #    quantity_errors_ponderated = self.exec_data_knn_ponderated(data, data, i)
-        #    errors_array_in_k_ponderated.append(quantity_errors_ponderated)
-        #    quantity_errors_ponderated = 0
-        # print('Errors Array in k ponderated: ', np.array(errors_array_in_k_ponderated))
-        data_a_plotear = self.exec_data_knn_ponderated(data, data, 1)
-        print('data a plotear: ', data_a_plotear)
-        return np.array(data_a_plotear)
+        self.get_errors_in_k_ponderated(data, k)
+        #data_a_plotear = self.exec_data_knn_ponderated(data, data, k)
+        #print('data a plotear: ', data_a_plotear)
+        #return np.array(data_a_plotear)
         # print('lista de vecinos: ', neighbors)
         # classif = self.get_class_ponderated(neighbors)
         # print('THE CLASS CLASSIFIED TO UNKNOWN POINT IS: ', classif)
+        return np.array(data)
+
+    def get_errors_in_k_ponderated(self, data, k):
+        errors_array_in_k_ponderated = []
+        for i in range(0,k):
+            quantity_errors_ponderated = self.exec_data_knn_ponderated(data, data, i)
+            errors_array_in_k_ponderated.append(quantity_errors_ponderated)
+            quantity_errors_ponderated = 0
+        print('Errors Array in k ponderated: ', np.array(errors_array_in_k_ponderated))
+
 
     def open_file_data(self, filename):
         #file = open('../datasets/' + filename)
