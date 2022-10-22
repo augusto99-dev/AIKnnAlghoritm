@@ -409,10 +409,16 @@ class KnnController:
         # Funca: 2- Evaluar la clasificacion utilizando el k optimo obtenido
         #############################################################
         # dataset, dataset, k
-        result_points_plot = self.exec_data_knn(data, data, self.k_optimo)
-        print("escribio")
-        self.point_to_plot = np.array(result_points_plot)
-        return np.array(result_points_plot)
+        if k == 0:
+            result_points_plot = self.exec_data_knn(data, data, self.k_optimo)
+            print("escribio")
+            self.point_to_plot = np.array(result_points_plot)
+            return np.array(result_points_plot)
+        else:
+            result_points_plot = self.exec_data_knn(data, data, k)
+            print("escribio")
+            self.point_to_plot = np.array(result_points_plot)
+            return np.array(result_points_plot)
 
         #############################################################
         # Process: 3- Obtener la mejor clasificacion utilizando knn ponderado para un rango de [1-15]
@@ -421,7 +427,6 @@ class KnnController:
         errors_array_in_k_ponderated = []
         # para cada k hasta 15 (Pasar k al range) la vista necesita la clasificacion entera de cada k
         # pasar k
-        k = 5
         #for i in range(0,k):
         #    quantity_errors_ponderated = self.exec_data_knn_ponderated(data, data, i)
         #    errors_array_in_k_ponderated.append(quantity_errors_ponderated)
