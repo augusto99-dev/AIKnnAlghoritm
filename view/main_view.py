@@ -18,7 +18,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tabWidget = QtWidgets.QTabWidget(self.centralwidget)
-        self.tabWidget.setGeometry(QtCore.QRect(20, -30, 911, 771))
+        self.tabWidget.setGeometry(QtCore.QRect(0, 0, 911, 771))
         self.tabWidget.setAccessibleName("")
         self.tabWidget.setAccessibleDescription("")
         self.tabWidget.setDocumentMode(True)
