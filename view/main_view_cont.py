@@ -1,15 +1,18 @@
+import os
+
 from PyQt5 import uic
 from PyQt5.QtCore import QMutex
 import sys
-from controller.Controller import KnnController
 from main_view import *
 from Graphics2D import *
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QTableWidgetItem
+from controller.Controller import KnnController
 import csv
 import numpy as np
 
-qt_creator_file = "main_view.ui"
+#qt_creator_file = "main_view.ui"
+qt_creator_file = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), "main_view.ui")
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_creator_file)
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -107,6 +110,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def get_file(self):
         return self.dataset[0]
 
+
+# if __name__ == "__main__":
+#     app = QtWidgets.QApplication(sys.argv)
+#     window = MainWindow()
+#     window.show()
+#     app.exec_()
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
