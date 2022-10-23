@@ -49,13 +49,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def run_alg(self):
         self.controller.run_algorith(self.get_file(),int(self.label_value.text()))
+        while self.grafico1.count() > 0:
+            self.grafico1.removeWidget(self.grafica1)
+            self.grafico3.removeWidget(self.grafica2)
+            self.grafico2.removeWidget(self.grafica3)
+            self.error_layout1.removeWidget(self.grafico_errores)
+            self.error_layout2.removeWidget(self.grafico_errores_pond)
+        while self.layout_k_sel_pon.count() > 0:
+            self.layout_k_sel_pon.removeWidget(self.grafica_k_sel_pon)
+            self.layout_k_sel.removeWidget(self.grafica_k_sel)
         self.grafica1 = Canvas_grafica(self.controller)
         self.grafico1.addWidget(self.grafica1)
         self.grafica2 = Canvas_grafica2(self.controller)
         self.grafico3.addWidget(self.grafica2)
         self.grafica3 = Canvas_grafica3(self.controller)
         self.grafico2.addWidget(self.grafica3)
-        self.grafico_errores_pond = GraficoErrores(self.controller.run_algorithm_of_k_optim_ponderated(self.get_file(),4), "Errores Alg. KNN Ponderado")
+        self.errore_pond = GraficoErrores(self.controller.run_algorithm_of_k_optim_ponderated(self.get_file(),4), "Errores Alg. KNN Ponderado")
+        self.grafico_errores_pond = self.errore_pond
         self.grafico_errores = GraficoErrores(self.controller.run_algorithm_k_optim(self.get_file(), 4),"Errores Alg. KNN")
         self.error_layout1.addWidget(self.grafico_errores)
         self.error_layout2.addWidget(self.grafico_errores_pond)
