@@ -43,6 +43,7 @@ class Canvas_grafica3(FigureCanvas):
             self.ax.grid()
             self.ax.margins(x=0)
             self.controller = controller
+
             print("data desde vista grafics init", self.controller.get_point())
             grafica_datos1(self, self.controller.point_to_plot_ponderated, "Clasificación Alg. KNN Ponderado con K optimo")
 
