@@ -16,6 +16,8 @@ def grafica_datos1(canvas,data,title):
     x = data[:, [0, 1, 2]]
     y = data[:, -1].astype(int)
     plt.title(title)
+    plt.xlabel("Eje X de datos")
+    plt.ylabel("Eje Y de los datos")
     plt.scatter(x[:, 0][y == 0], x[:, 1][y == 0], s=4, c='red')
     plt.scatter(x[:, 0][y == 1], x[:, 1][y == 1], s=4, c='blue')
     plt.scatter(x[:, 0][y == 2], x[:, 1][y == 2], s=4, c='g')
@@ -30,6 +32,8 @@ def grafica_errores(canvas,data,title):
     xpoints = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
     plt.plot(xpoints, data)
     plt.title(title)
+    plt.xlabel("Variación del parámetro K")
+    plt.ylabel("Cantidad de errores de clasificación")
     canvas.draw()
 
 class Canvas_grafica3(FigureCanvas):
