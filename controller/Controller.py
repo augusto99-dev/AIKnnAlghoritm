@@ -57,7 +57,7 @@ class KnnController:
         for i in range(400, 560):
             distance = self.euclidean_distance(point, dataset[i])
             self.distances.append((dataset[i], distance))
-        print('Vector with distances TRAINEE DATA ::: ', self.distances)
+        #print('Vector with distances TRAINEE DATA ::: ', self.distances)
         self.distances.sort(key=lambda tup: tup[1])
         return self.distances
 
@@ -67,7 +67,7 @@ class KnnController:
         freq2 = 0
         for i in range(len(neighbors)):
             if neighbors[i][0][2] == 1:
-                print('La distancia: ', neighbors[i][1])
+                #print('La distancia: ', neighbors[i][1])
                 if neighbors[i][1] != 0:  # not division by zero
                     freq1 += 1 / neighbors[i][1]
             else:
@@ -139,9 +139,9 @@ class KnnController:
                 class_0 += 1/neighbors[i][1] * self.validate_class(0, neighbors[i])
                 class_1 += 1/neighbors[i][1] * self.validate_class(1, neighbors[i])
                 class_2 += 1/neighbors[i][1] * self.validate_class(2, neighbors[i])
-            print('class 0 quantity: ', class_0)
-            print('class 1 quantity: ', class_1)
-            print('class 2 quantity: ', class_2)
+            #print('class 0 quantity: ', class_0)
+            #print('class 1 quantity: ', class_1)
+            #print('class 2 quantity: ', class_2)
 
 
         #print('class 0 quantity: ', class_0)
@@ -166,9 +166,9 @@ class KnnController:
         class_1 = sum(self.validate_class(1, x) for x in array_of_k_elements)
         class_2 = sum(self.validate_class(2, x) for x in array_of_k_elements)
 
-        print('class 0 quantity: ', class_0)
-        print('class 1 quantity: ', class_1)
-        print('class 2 quantity: ', class_2)
+        #print('class 0 quantity: ', class_0)
+        #print('class 1 quantity: ', class_1)
+        #print('class 2 quantity: ', class_2)
 
         if class_0 > class_1 and class_0 > class_2:
             return 0
@@ -189,7 +189,7 @@ class KnnController:
         #     return 0
 
     def get_k_optim(self, data_points):
-        print('El dataset: ', data_points)
+        #print('El dataset: ', data_points)
         quantity_points = len(data_points)
         # declarando la matrix nxn
         matrix_distances = [[0 for x in range(quantity_points)] for y in range(quantity_points)]
@@ -217,11 +217,11 @@ class KnnController:
 
                     # matrix_distances[i][j] = self.euclidean_distance(data_points[i], data_points[j])
 
-        print('The matrix of distances: ', np.array(matrix_distances))
+        #print('The matrix of distances: ', np.array(matrix_distances))
         # Hasta aqui la matriz de distancias
 
         matrix_ordered = self.order_matrix_by_column(matrix_distances, len(matrix_distances), len(matrix_distances[0]))
-        print('Matriz ordenada: ', np.array(matrix_ordered))
+        #print('Matriz ordenada: ', np.array(matrix_ordered))
         # segundo parametro (len(matrix_distances)) parametro es el k variable
         matrix_of_ones = self.build_matrix_of_k(matrix_ordered, len(matrix_distances), len(matrix_distances[0]))
         k = self.get_row_max_k(matrix_of_ones)
@@ -230,17 +230,17 @@ class KnnController:
 
     def get_k_optim_ponderated(self, data_points):
         matrix_ordered = self.get_matrix_of_distances_ordered(data_points)
-        print('Matriz ordenada: ', np.array(matrix_ordered))
+        #print('Matriz ordenada: ', np.array(matrix_ordered))
         # segundo parametro (len(matrix_distances)) parametro es el k variable
         matrix_of_ones = self.build_matrix_of_k_pondered(matrix_ordered, len(matrix_ordered), len(matrix_ordered[0]))
         array_with_k_and_value = self.get_row_max_k_ponderated(matrix_of_ones)
-        print('K OPTIMO of array: ', array_with_k_and_value[0])
+        #print('K OPTIMO of array: ', array_with_k_and_value[0])
         return array_with_k_and_value[0]
 
     # traer los primeros k=1 hasta k=15
     def get_k_optim_ponderated_of_1_15(self, data_points):
         matrix_ordered = self.get_matrix_of_distances_ordered(data_points)
-        print('Matriz ordenada: ', np.array(matrix_ordered))
+        #print('Matriz ordenada: ', np.array(matrix_ordered))
         # segundo parametro (len(matrix_distances)) parametro es el k variable
         matrix_of_ones = self.build_matrix_of_k_pondered(matrix_ordered, len(matrix_ordered), len(matrix_ordered[0]))
 
@@ -249,26 +249,26 @@ class KnnController:
         first_15 = result[0:15]
         #print('array de k values: ', array_with_k_and_value)
 
-        print('15 filas::: ', first_15)
+        #print('15 filas::: ', first_15)
 
         return first_15
 
     # traer los primeros k=1 hasta k=15
     def get_k_optim_of_1_15(self, data_points):
         matrix_ordered = self.get_matrix_of_distances_ordered(data_points)
-        print('Matriz ordenada: ', np.array(matrix_ordered))
+        #print('Matriz ordenada: ', np.array(matrix_ordered))
         # segundo parametro (len(matrix_distances)) parametro es el k variable
         matrix_of_ones = self.build_matrix_of_k(matrix_ordered, len(matrix_ordered), len(matrix_ordered[0]))
         result = self.sum_rows(matrix_of_ones)
         first_15 = result[0:15]
         #print('array de k values: ', array_with_k_and_value)
 
-        print('15 filas sin ponderar::: ', first_15)
+        #print('15 filas sin ponderar::: ', first_15)
 
         return first_15
 
     def get_matrix_of_distances_ordered(self, data_points):
-        print('El dataset: ', data_points)
+        #print('El dataset: ', data_points)
         quantity_points = len(data_points)
         # declarando la matrix nxn
         matrix_distances = [[0 for x in range(quantity_points)] for y in range(quantity_points)]
@@ -296,7 +296,7 @@ class KnnController:
 
                     # matrix_distances[i][j] = self.euclidean_distance(data_points[i], data_points[j])
 
-        print('The matrix of distances: ', np.array(matrix_distances))
+        #print('The matrix of distances: ', np.array(matrix_distances))
         # Hasta aqui la matriz de distancias
         matrix_ordered = self.order_matrix_by_column(matrix_distances, len(matrix_distances), len(matrix_distances[0]))
         return matrix_ordered
@@ -312,15 +312,15 @@ class KnnController:
                 sum_aux += matrix[i][j]
             result.append(sum_aux)
             # print('Suma fila: ', sum_aux)
-        print('Array de k values rows: ', np.array(result))
+        #print('Array de k values rows: ', np.array(result))
         tmp = max(result)
         k = result.index(tmp) + 1  # + 1 porque usamos los indices de arreglos!
-        print('Valor maximo: ', tmp)
-        print('K Optimo:::: ', k)
+        #print('Valor maximo: ', tmp)
+        #print('K Optimo:::: ', k)
 
         # my_list = [10, 72, 54, 25, 73, 40]
         max_item = max(result)
-        print(f'Max index is : {result.index(max_item)}')
+        #print(f'Max index is : {result.index(max_item)}')
         return k
 
 
@@ -336,7 +336,7 @@ class KnnController:
                 sum_aux += matrix[i][j]
             result.append(sum_aux)
             # print('Suma fila: ', sum_aux)
-        print('Array de k values rows: ', np.array(result))
+        #print('Array de k values rows: ', np.array(result))
         return result
 
     def get_row_max_k_ponderated(self, matrix):
@@ -344,12 +344,12 @@ class KnnController:
         result = self.sum_rows(matrix)
         tmp = max(result)
         k = result.index(tmp) + 1  # + 1 porque usamos los indices de arreglos!
-        print('Valor maximo: ', tmp)
-        print('K Optimo:::: ', k)
+        #print('Valor maximo: ', tmp)
+        #print('K Optimo:::: ', k)
 
         # my_list = [10, 72, 54, 25, 73, 40]
         max_item = max(result)
-        print(f'Max index is : {result.index(max_item)}')
+        #print(f'Max index is : {result.index(max_item)}')
         array_k_and_hits_value = [k, tmp]
         return array_k_and_hits_value
 
@@ -411,7 +411,7 @@ class KnnController:
             c0 = 0
             c1 = 0
             c2 = 0
-        print('Final matrix:: ', np.array(res))
+        #print('Final matrix:: ', np.array(res))
         return res
 
     def build_matrix_of_k_pondered(self, matrix_ordered, R, C):
@@ -473,7 +473,7 @@ class KnnController:
             c0 = 0
             c1 = 0
             c2 = 0
-        print('Final matrix:: ', np.array(res))
+        #print('Final matrix:: ', np.array(res))
         return res
 
 
@@ -503,8 +503,8 @@ class KnnController:
         for i in range(560, 600):
             array_test.append(matrix[i])
 
-        print('array ::: ', np.array(array_test))
-        print('lenght:: ', len(array_test))
+        #print('array ::: ', np.array(array_test))
+        #print('lenght:: ', len(array_test))
 
         return np.array(array_test)
 
@@ -560,7 +560,7 @@ class KnnController:
                 errors += 1
             neighbors.clear()
         #print('Errors quantity: ', errors)
-        print('Matrix result: ', matrix_result)
+        #print('Matrix result: ', matrix_result)
         return matrix_result
         #return errors
 
@@ -654,7 +654,7 @@ class KnnController:
             quantity_errors_ponderated = self.exec_data_knn_ponderated(data, data, i)
             errors_array_in_k_ponderated.append(quantity_errors_ponderated)
             quantity_errors_ponderated = 0
-        print('Errors Array in k ponderated: ', np.array(errors_array_in_k_ponderated))
+        #print('Errors Array in k ponderated: ', np.array(errors_array_in_k_ponderated))
 
 
 
