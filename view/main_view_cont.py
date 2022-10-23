@@ -51,11 +51,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.grafica1 = Canvas_grafica(self.controller)
         self.grafico1.addWidget(self.grafica1)
         self.grafica2 = Canvas_grafica2(self.controller)
-        self.grafico2.addWidget(self.grafica2)
-        self.grafico_errores = GraficoErrores()
+        self.grafico3.addWidget(self.grafica2)
+        self.grafica3 = Canvas_grafica3(self.controller)
+        self.grafico2.addWidget(self.grafica3)
+        self.grafico_errores_pond = GraficoErrores(self.controller.run_algorithm_of_k_optim_ponderated(self.get_file(),4), "Errores Alg. KNN Ponderado con K optimo")
+        self.grafico_errores = GraficoErrores(self.controller.run_algorithm_k_optim(self.get_file(), 4),"Errores Alg. KNN con K Optimo")
         self.error_layout1.addWidget(self.grafico_errores)
+        self.error_layout2.addWidget(self.grafico_errores_pond)
         self.k_value.setText(" "+str(self.grafica1.get_koptim()))
-
+        self.k_value_2.setText(" "+str(self.grafica3.get_koptim()))
     def open_file(self, archivo):
         with open(archivo[0], 'r') as file:
             csvreader = csv.reader(file)
@@ -83,7 +87,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             data = self.open_file(self.dataset)
         return self.dataset
     def get_file(self):
-        print("ASDADADSAD")
         return self.dataset[0]
 
 

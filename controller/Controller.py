@@ -15,8 +15,10 @@ class KnnController:
                         [-2, -9, 1],
                         [-4, -7, 1]]
         self.point_to_plot = None
+        self.point_to_plot_ponderated = None
         self.points_csv = None
         self.k_optimo = None
+        self.k_optim_pondered = None
 
         # Struct vector point
         # [x,y,class,distance]
@@ -103,9 +105,9 @@ class KnnController:
                 class_0 += 1/neighbors[i][1] * self.validate_class(0, neighbors[i])
                 class_1 += 1/neighbors[i][1] * self.validate_class(1, neighbors[i])
                 class_2 += 1/neighbors[i][1] * self.validate_class(2, neighbors[i])
-            print('class 0 quantity: ', class_0)
-            print('class 1 quantity: ', class_1)
-            print('class 2 quantity: ', class_2)
+            #print('class 0 quantity: ', class_0)
+            #print('class 1 quantity: ', class_1)
+            #print('class 2 quantity: ', class_2)
 
 
         #print('class 0 quantity: ', class_0)
@@ -231,7 +233,7 @@ class KnnController:
         matrix_of_ones = self.build_matrix_of_k_pondered(matrix_ordered, len(matrix_ordered), len(matrix_ordered[0]))
         array_with_k_and_value = self.get_row_max_k_ponderated(matrix_of_ones)
         print('K OPTIMO of array: ', array_with_k_and_value[0])
-        return array_with_k_and_value
+        return array_with_k_and_value[0]
 
     # traer los primeros k=1 hasta k=15
     def get_k_optim_ponderated_of_1_15(self, data_points):
@@ -508,17 +510,17 @@ class KnnController:
         matrix_result = []
         for i in range(len(data_test)):
             neighbors = self.get_neighbors(data_test[i], matrix)
-            print('neighbors quantity: ', len(neighbors))
+            #print('neighbors quantity: ', len(neighbors))
             class_result = self.get_class(neighbors, k)
-            print('Clasifica como clase: ', class_result)
-            print('Sin embargo era de clase:: ', matrix[i][2])
+            #print('Clasifica como clase: ', class_result)
+            #print('Sin embargo era de clase:: ', matrix[i][2])
             if int(class_result) != matrix[i][2]:
                 point_failed = copy.deepcopy(matrix[i])
                 if class_result == 0:
                     point_failed[2] = -100
                 else:
                     point_failed[2] = point_failed[2] * -1
-                print('point failed: ', point_failed)
+                #print('point failed: ', point_failed)
                 matrix_result.append(point_failed)
             else:
                 matrix_result.append(matrix[i])
@@ -532,11 +534,11 @@ class KnnController:
         # aca el range seria el tamaño de la matriz (Todos contra todos!)
         for i in range(len(data_test)):
             neighbors = self.get_neighbors(data_test[i], matrix)
-            print('neighbors quantity: ', np.array(neighbors))
+            #print('neighbors quantity: ', np.array(neighbors))
             class_result = self.get_class_ponderated(neighbors, k)
-            print('punto a clasificar:: ', matrix[i])
-            print('Clasifica como clase: ', class_result)
-            print('Sin embargo era de clase:: ', matrix[i][2])
+            #print('punto a clasificar:: ', matrix[i])
+            #print('Clasifica como clase: ', class_result)
+            #print('Sin embargo era de clase:: ', matrix[i][2])
 
             # aca appendear el array nuevo con sus colores si hay errores.
             # ...
@@ -546,7 +548,7 @@ class KnnController:
                     point_failed[2] = -100
                 else:
                     point_failed[2] = point_failed[2] * -1
-                print('point failed: ', point_failed)
+                #print('point failed: ', point_failed)
                 matrix_result.append(point_failed)
             else:
                 matrix_result.append(matrix[i])
@@ -555,9 +557,10 @@ class KnnController:
                 # contar los errores
                 errors += 1
             neighbors.clear()
-        print('Errors quantity: ', errors)
-        #return matrix_result
-        return errors
+        #print('Errors quantity: ', errors)
+        print('Matrix result: ', matrix_result)
+        return matrix_result
+        #return errors
 
     def run_algorith(self, path_dataset, k):
         data = self.open_file_data(path_dataset)
@@ -572,6 +575,8 @@ class KnnController:
 
         self.k_optimo = self.get_k_optim(data)
         # point_unknowkn = [2, 1]
+
+        self.k_optim_pondered = self.get_k_optim_ponderated(data)
 
         # neighbors = self.get_neighbors(point_unknowkn, self.dataset)
         # print('neighbors quantity: ', len(neighbors))
@@ -588,11 +593,14 @@ class KnnController:
             result_points_plot = self.exec_data_knn(data, data, self.k_optimo)
             print("escribio")
             self.point_to_plot = np.array(result_points_plot)
+            self.point_to_plot_ponderated = np.array(self.exec_data_knn_ponderated(data, data, self.k_optim_pondered))
             return np.array(result_points_plot)
         else:
             result_points_plot = self.exec_data_knn(data, data, k)
             print("escribio")
             self.point_to_plot = np.array(result_points_plot)
+            # ponderated
+            self.point_to_plot_ponderated = np.array(self.exec_data_knn_ponderated(data, data, k))
             return np.array(result_points_plot)
 
         #############################################################
@@ -617,16 +625,22 @@ class KnnController:
         data = self.open_file_data(path)
         ## trae el array de aciertos ponderados ##
         first15 = self.get_k_optim_ponderated_of_1_15(data)
-        print('K and hits: ', first15)
+        #print('K and hits: ', first15)
         #self  .get_errors_in_k_ponderated(data, k)
+        return self.get_errors_view(first15)
 
     def run_algorithm_k_optim(self, path, k):
         data = self.open_file_data(path)
         first15 = self.get_k_optim_of_1_15(data)
-        print('K and hits sin ponderar: ', first15)
-
+        #print('K and hits sin ponderar: ', first15)
+        return self.get_errors_view(first15)
     def run_algorithm_aug(self, path, k):
-        pass
+        data = self.open_file_data(path)
+        ## trae el array de aciertos ponderados ##
+        first15 = self.get_k_optim_ponderated(data)
+        # print('K and hits: ', first15)
+        # self  .get_errors_in_k_ponderated(data, k)
+        return self.get_errors_view(first15)
 
     def get_errors_in_k_ponderated(self, data, k):
         errors_array_in_k_ponderated = []
@@ -655,10 +669,17 @@ class KnnController:
         data = np.array(rows)
         data_float = data.astype(float)
         return data_float
-
+    def get_errors_view(self,array):
+        array_errors =[]
+        for element in array:
+            element = 600 - element
+            array_errors.append(element)
+        return array_errors
     def get_point_to_plot(self):
         return self.point_to_plot
     def get_point(self):
         return self.points_csv
+    def get_k_optim_value_from_controller(self):
+        return self.k_optimo
     def get_k_optim_value_from_controller(self):
         return self.k_optimo
