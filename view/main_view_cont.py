@@ -4,9 +4,11 @@ import sys
 from controller.Controller import KnnController
 from main_view import *
 from Graphics2D import *
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QScrollArea
 from PyQt5.QtWidgets import QTableWidgetItem
 import csv
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
+
 import numpy as np
 
 qt_creator_file = "main_view.ui"
@@ -22,9 +24,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionAbrir.triggered.connect(self.abrir)
         self.pushButton.setEnabled(False)
         self.pushButton.clicked.connect(self.run_alg)
-        self.tableWidget.setColumnWidth(0, 100)
-        self.tableWidget.setColumnWidth(1, 100)
-        self.tableWidget.setColumnWidth(2, 100)
+        self.tableWidget.setColumnWidth(0, 120)
+        self.tableWidget.setColumnWidth(1, 120)
+        self.tableWidget.setColumnWidth(2, 120)
         self.tableWidget.setColumnCount(3)
         self.tableWidget.setHorizontalHeaderLabels(("X", "Y", "CLASE"))
         self.k_slider.valueChanged.connect(self.label_value.setNum)
@@ -58,24 +60,40 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         while self.layout_k_sel_pon.count() > 0:
             self.layout_k_sel_pon.removeWidget(self.grafica_k_sel_pon)
             self.layout_k_sel.removeWidget(self.grafica_k_sel)
+        #Grafico K optimo KNN
         self.grafica1 = Canvas_grafica(self.controller)
+        self.toolbar_knn = NavigationToolbar(self.grafica1, self)
+        self.grafico1.addWidget(self.toolbar_knn)
         self.grafico1.addWidget(self.grafica1)
-        self.grafica2 = Canvas_grafica2(self.controller)
-        self.grafico3.addWidget(self.grafica2)
+        #Grafico KNN POND K opt
         self.grafica3 = Canvas_grafica3(self.controller)
-        self.grafico2.addWidget(self.grafica3)
+        self.toolbar_knn_pon = NavigationToolbar(self.grafica3, self)
+        self.grafico3.addWidget(self.toolbar_knn_pon)
+        self.grafico3.addWidget(self.grafica3)
+        # Grafico Dataset
+        self.grafica2 = Canvas_grafica2(self.controller)
+        self.toolbar_dataset = NavigationToolbar(self.grafica2, self)
+        self.grafico2.addWidget(self.toolbar_dataset)
+        self.grafico2.addWidget(self.grafica2)
+        #Grafico Errores knn
         self.errore_pond = GraficoErrores(self.controller.run_algorithm_of_k_optim_ponderated(self.get_file(),4), "Errores Alg. KNN Ponderado")
         self.grafico_errores_pond = self.errore_pond
         self.grafico_errores = GraficoErrores(self.controller.run_algorithm_k_optim(self.get_file(), 4),"Errores Alg. KNN")
         self.error_layout1.addWidget(self.grafico_errores)
+        #Grafrico errores KNN PON
         self.error_layout2.addWidget(self.grafico_errores_pond)
         self.k_value.setText(" "+str(self.grafica1.get_koptim()))
         self.k_value_2.setText(" "+str(self.grafica3.get_koptim()))
         if int(self.label_value.text()) != 0:
             self.grafica_k_sel_pon = Canvas_grafica_k_pond_sel(self.controller)
+            self.toolbar_k_sel_pon = NavigationToolbar(self.grafica_k_sel_pon, self)
+            self.layout_k_sel_pon.addWidget(self.toolbar_k_sel_pon)
             self.layout_k_sel_pon.addWidget(self.grafica_k_sel_pon)
             self.grafica_k_sel = Canvas_grafica_k_sel(self.controller)
+            self.toolbar_k_sel = NavigationToolbar(self.grafica_k_sel, self)
+            self.layout_k_sel.addWidget(self.toolbar_k_sel)
             self.layout_k_sel.addWidget(self.grafica_k_sel)
+
     def open_file(self, archivo):
         with open(archivo[0], 'r') as file:
             csvreader = csv.reader(file)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>904</width>
-    <height>758</height>
+    <width>1121</width>
+    <height>687</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>911</width>
-      <height>771</height>
+      <width>1091</width>
+      <height>671</height>
      </rect>
     </property>
     <property name="accessibleName">
@@ -51,10 +51,10 @@
      <widget class="QTableWidget" name="tableWidget">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>100</x>
         <y>20</y>
-        <width>371</width>
-        <height>671</height>
+        <width>421</width>
+        <height>571</height>
        </rect>
       </property>
       <column>
@@ -76,32 +76,33 @@
      <widget class="QWidget" name="verticalLayoutWidget_5">
       <property name="geometry">
        <rect>
-        <x>530</x>
-        <y>150</y>
-        <width>271</width>
-        <height>441</height>
+        <x>580</x>
+        <y>320</y>
+        <width>371</width>
+        <height>61</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QCheckBox" name="checkBox">
-         <property name="font">
-          <font>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="autoFillBackground">
-          <bool>true</bool>
-         </property>
+        <widget class="QPushButton" name="pushButton">
          <property name="text">
-          <string>Seleccionar valor de k</string>
+          <string>Correr Algoritmo</string>
          </property>
         </widget>
        </item>
-       <item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="gridLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>630</x>
+        <y>130</y>
+        <width>251</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="1" column="0">
         <widget class="QSlider" name="k_slider">
          <property name="enabled">
           <bool>false</bool>
@@ -126,6 +127,18 @@
          </property>
         </widget>
        </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>750</x>
+        <y>230</y>
+        <width>41</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="QLabel" name="label_value">
          <property name="enabled">
@@ -145,14 +158,53 @@
          </property>
         </widget>
        </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_9">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>50</y>
+        <width>160</width>
+        <height>80</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QCheckBox" name="checkBox">
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
          <property name="text">
-          <string>Correr Algoritmo</string>
+          <string>Seleccionar valor de k</string>
          </property>
         </widget>
        </item>
       </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>Grafico Dataset</string>
+     </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget_4">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>50</y>
+        <width>631</width>
+        <height>451</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="grafico2"/>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_3">
@@ -162,10 +214,10 @@
      <widget class="QWidget" name="verticalLayoutWidget">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>0</x>
         <y>80</y>
-        <width>451</width>
-        <height>301</height>
+        <width>531</width>
+        <height>451</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="grafico1"/>
@@ -173,21 +225,10 @@
      <widget class="QWidget" name="verticalLayoutWidget_2">
       <property name="geometry">
        <rect>
-        <x>470</x>
+        <x>550</x>
         <y>80</y>
-        <width>451</width>
-        <height>301</height>
-       </rect>
-      </property>
-      <layout class="QVBoxLayout" name="grafico2"/>
-     </widget>
-     <widget class="QWidget" name="verticalLayoutWidget_3">
-      <property name="geometry">
-       <rect>
-        <x>230</x>
-        <y>390</y>
-        <width>451</width>
-        <height>301</height>
+        <width>541</width>
+        <height>451</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="grafico3"/>
@@ -195,7 +236,7 @@
      <widget class="QWidget" name="horizontalLayoutWidget">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>110</x>
         <y>0</y>
         <width>271</width>
         <height>80</height>
@@ -231,7 +272,7 @@
      <widget class="QWidget" name="horizontalLayoutWidget_2">
       <property name="geometry">
        <rect>
-        <x>505</x>
+        <x>630</x>
         <y>0</y>
         <width>371</width>
         <height>80</height>
@@ -269,27 +310,27 @@
      <attribute name="title">
       <string>Grafico k elegido</string>
      </attribute>
-     <widget class="QWidget" name="horizontalLayoutWidget_3">
+     <widget class="QWidget" name="verticalLayoutWidget_3">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>9</x>
         <y>30</y>
-        <width>421</width>
-        <height>331</height>
+        <width>521</width>
+        <height>431</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="layout_k_sel"/>
+      <layout class="QVBoxLayout" name="layout_k_sel"/>
      </widget>
-     <widget class="QWidget" name="horizontalLayoutWidget_4">
+     <widget class="QWidget" name="verticalLayoutWidget_8">
       <property name="geometry">
        <rect>
-        <x>420</x>
+        <x>539</x>
         <y>30</y>
-        <width>421</width>
-        <height>331</height>
+        <width>551</width>
+        <height>431</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="layout_k_sel_pon"/>
+      <layout class="QVBoxLayout" name="layout_k_sel_pon"/>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
@@ -299,10 +340,10 @@
      <widget class="QWidget" name="verticalLayoutWidget_6">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>60</y>
-        <width>441</width>
-        <height>351</height>
+        <x>10</x>
+        <y>40</y>
+        <width>521</width>
+        <height>421</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="error_layout1"/>
@@ -310,10 +351,10 @@
      <widget class="QWidget" name="verticalLayoutWidget_7">
       <property name="geometry">
        <rect>
-        <x>460</x>
-        <y>60</y>
-        <width>431</width>
-        <height>351</height>
+        <x>540</x>
+        <y>40</y>
+        <width>541</width>
+        <height>421</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="error_layout2"/>
@@ -326,7 +367,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>904</width>
+     <width>1121</width>
      <height>21</height>
     </rect>
    </property>
