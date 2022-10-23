@@ -1,12 +1,6 @@
-# Grafica 2D con linea
-import numpy as np
-import csv
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import numpy as np
-from PyQt5 import QtCore
 import matplotlib.pyplot as plt
-from controller.Controller import KnnController
-import matplotlib
 
 
 def grafica_datos1(canvas,data,title):
