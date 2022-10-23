@@ -20,6 +20,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
         self.actionAbrir.triggered.connect(self.abrir)
+        self.pushButton.setEnabled(False)
         self.pushButton.clicked.connect(self.run_alg)
         self.tableWidget.setColumnWidth(0, 100)
         self.tableWidget.setColumnWidth(1, 100)
@@ -54,12 +55,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.grafico3.addWidget(self.grafica2)
         self.grafica3 = Canvas_grafica3(self.controller)
         self.grafico2.addWidget(self.grafica3)
-        self.grafico_errores_pond = GraficoErrores(self.controller.run_algorithm_of_k_optim_ponderated(self.get_file(),4), "Errores Alg. KNN Ponderado con K optimo")
-        self.grafico_errores = GraficoErrores(self.controller.run_algorithm_k_optim(self.get_file(), 4),"Errores Alg. KNN con K Optimo")
+        self.grafico_errores_pond = GraficoErrores(self.controller.run_algorithm_of_k_optim_ponderated(self.get_file(),4), "Errores Alg. KNN Ponderado")
+        self.grafico_errores = GraficoErrores(self.controller.run_algorithm_k_optim(self.get_file(), 4),"Errores Alg. KNN")
         self.error_layout1.addWidget(self.grafico_errores)
         self.error_layout2.addWidget(self.grafico_errores_pond)
         self.k_value.setText(" "+str(self.grafica1.get_koptim()))
         self.k_value_2.setText(" "+str(self.grafica3.get_koptim()))
+        if int(self.label_value.text()) != 0:
+            self.grafica_k_sel_pon = Canvas_grafica_k_pond_sel(self.controller)
+            self.layout_k_sel_pon.addWidget(self.grafica_k_sel_pon)
+            self.grafica_k_sel = Canvas_grafica_k_sel(self.controller)
+            self.layout_k_sel.addWidget(self.grafica_k_sel)
     def open_file(self, archivo):
         with open(archivo[0], 'r') as file:
             csvreader = csv.reader(file)
@@ -82,9 +88,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             return self.dataset
 
     def abrir(self):
-        self.dataset = QFileDialog.getOpenFileName(self, 'abrir archivo', 'C:\\')
+        filters = "Text files (*.csv);;"
+        self.dataset = QFileDialog.getOpenFileName(self, 'abrir archivo', 'C:\\',filters)
         if self.dataset[0]:
             data = self.open_file(self.dataset)
+            self.pushButton.setEnabled(True)
         return self.dataset
     def get_file(self):
         return self.dataset[0]

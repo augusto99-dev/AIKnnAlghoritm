@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>901</width>
+    <width>904</width>
     <height>758</height>
    </rect>
   </property>
@@ -157,7 +157,7 @@
     </widget>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
-      <string>Graficos</string>
+      <string>Graficos K Optimo</string>
      </attribute>
      <widget class="QWidget" name="verticalLayoutWidget">
       <property name="geometry">
@@ -265,6 +265,33 @@
       </layout>
      </widget>
     </widget>
+    <widget class="QWidget" name="tab_4">
+     <attribute name="title">
+      <string>Grafico k elegido</string>
+     </attribute>
+     <widget class="QWidget" name="horizontalLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>30</y>
+        <width>421</width>
+        <height>331</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="layout_k_sel"/>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_4">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>30</y>
+        <width>421</width>
+        <height>331</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="layout_k_sel_pon"/>
+     </widget>
+    </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
       <string>Errores</string>
@@ -299,7 +326,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>901</width>
+     <width>904</width>
      <height>21</height>
     </rect>
    </property>

@@ -78,3 +78,25 @@ class GraficoErrores(FigureCanvas):
         self.ax.grid()
         self.ax.margins(x=0)
         grafica_errores(self,data,title)
+
+class Canvas_grafica_k_sel(FigureCanvas):
+        def __init__(self, controller, parent=None):
+            self.fig, self.ax = plt.subplots(facecolor='gray')
+            super().__init__(self.fig)
+            self.ax.grid()
+            self.ax.margins(x=0)
+            self.controller = controller
+            print("data desde vista grafics init", self.controller.get_point())
+            grafica_datos1(self, self.controller.point_to_plot_k_selected,
+                           "Clasificación Alg. KNN")
+
+class Canvas_grafica_k_pond_sel(FigureCanvas):
+        def __init__(self, controller, parent=None):
+            self.fig, self.ax = plt.subplots(facecolor='gray')
+            super().__init__(self.fig)
+            self.ax.grid()
+            self.ax.margins(x=0)
+            self.controller = controller
+            print("data desde vista grafics init", self.controller.get_point())
+            grafica_datos1(self, self.controller.point_to_plot_ponderated_k_selected,
+                           "Clasificación Alg. KNN Ponderado")

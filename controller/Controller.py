@@ -16,6 +16,8 @@ class KnnController:
                         [-4, -7, 1]]
         self.point_to_plot = None
         self.point_to_plot_ponderated = None
+        self.point_to_plot_k_selected = None
+        self.point_to_plot_ponderated_k_selected = None
         self.points_csv = None
         self.k_optimo = None
         self.k_optim_pondered = None
@@ -577,6 +579,9 @@ class KnnController:
         # point_unknowkn = [2, 1]
 
         self.k_optim_pondered = self.get_k_optim_ponderated(data)
+        self.get_points_k_optim(data)
+        if k !=0:
+            self.get_points_k_selected(data,k)
 
         # neighbors = self.get_neighbors(point_unknowkn, self.dataset)
         # print('neighbors quantity: ', len(neighbors))
@@ -589,19 +594,7 @@ class KnnController:
         # Funca: 2- Evaluar la clasificacion utilizando el k optimo obtenido
         #############################################################
         # dataset, dataset, k
-        if k == 0:
-            result_points_plot = self.exec_data_knn(data, data, self.k_optimo)
-            print("escribio")
-            self.point_to_plot = np.array(result_points_plot)
-            self.point_to_plot_ponderated = np.array(self.exec_data_knn_ponderated(data, data, self.k_optim_pondered))
-            return np.array(result_points_plot)
-        else:
-            result_points_plot = self.exec_data_knn(data, data, k)
-            print("escribio")
-            self.point_to_plot = np.array(result_points_plot)
-            # ponderated
-            self.point_to_plot_ponderated = np.array(self.exec_data_knn_ponderated(data, data, k))
-            return np.array(result_points_plot)
+
 
         #############################################################
         # Process: 3- Obtener la mejor clasificacion utilizando knn ponderado para un rango de [1-15]
@@ -617,6 +610,19 @@ class KnnController:
         # classif = self.get_class_ponderated(neighbors)
         # print('THE CLASS CLASSIFIED TO UNKNOWN POINT IS: ', classif)
         return np.array(data)
+
+    def get_points_k_optim(self,data):
+        result_points_plot = self.exec_data_knn(data, data, self.k_optimo)
+        self.point_to_plot = np.array(result_points_plot)
+        self.point_to_plot_ponderated = np.array(self.exec_data_knn_ponderated(data, data, self.k_optim_pondered))
+        return np.array(result_points_plot)
+
+    def get_points_k_selected(self,data,k):
+        result_points_plot = self.exec_data_knn(data, data, k)
+        self.point_to_plot_k_selected = np.array(result_points_plot)
+        # ponderated
+        self.point_to_plot_ponderated_k_selected = np.array(self.exec_data_knn_ponderated(data, data, k))
+        return np.array(result_points_plot)
 
     ########
     # Usar esto para obtener el k optimo ponderado
