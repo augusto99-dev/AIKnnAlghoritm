@@ -577,12 +577,14 @@ class KnnController:
 
         self.k_optimo = self.get_k_optim(data)
         # point_unknowkn = [2, 1]
-
+        print("calcula el k optimo")
         self.k_optim_pondered = self.get_k_optim_ponderated(data)
+        print("calcula el k ponderado")
         self.get_points_k_optim(data)
         if k !=0:
+            print("entra al if de las k")
             self.get_points_k_selected(data,k)
-
+            print("sale del if de las k")
         # neighbors = self.get_neighbors(point_unknowkn, self.dataset)
         # print('neighbors quantity: ', len(neighbors))
         # class_result = self.get_class(neighbors, 3)

@@ -54,14 +54,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def run_alg(self):
         self.controller.run_algorith(self.get_file(),int(self.label_value.text()))
-        while self.grafico1.count() > 0:
+        if self.grafico1.count() > 0:
             self.grafico1.removeWidget(self.grafica1)
-            self.grafico3.removeWidget(self.grafica2)
-            self.grafico2.removeWidget(self.grafica3)
+            self.grafico1.removeWidget(self.toolbar_knn)
+            self.grafico3.removeWidget(self.grafica3)
+            self.grafico3.removeWidget(self.toolbar_knn_pon)
+            self.grafico2.removeWidget(self.grafica2)
+            self.grafico2.removeWidget(self.toolbar_dataset)
             self.error_layout1.removeWidget(self.grafico_errores)
             self.error_layout2.removeWidget(self.grafico_errores_pond)
-        while self.layout_k_sel_pon.count() > 0:
+        if self.layout_k_sel_pon.count() > 0:
             self.layout_k_sel_pon.removeWidget(self.grafica_k_sel_pon)
+            self.layout_k_sel_pon.removeWidget(self.toolbar_k_sel_pon)
+            self.layout_k_sel.removeWidget(self.toolbar_k_sel)
             self.layout_k_sel.removeWidget(self.grafica_k_sel)
         #Grafico K optimo KNN
         self.grafica1 = Canvas_grafica(self.controller)
@@ -83,7 +88,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.grafico_errores_pond = self.errore_pond
         self.grafico_errores = GraficoErrores(self.controller.run_algorithm_k_optim(self.get_file(), 4),"Errores Alg. KNN")
         self.error_layout1.addWidget(self.grafico_errores)
-        #Grafrico errores KNN PON
         self.error_layout2.addWidget(self.grafico_errores_pond)
         self.k_value.setText(" "+str(self.grafica1.get_koptim()))
         self.k_value_2.setText(" "+str(self.grafica3.get_koptim()))
