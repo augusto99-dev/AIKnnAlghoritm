@@ -26,6 +26,8 @@ def grafica_errores(canvas,data,title):
     # grafica el resultado del algoritmo
     xpoints = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])
     plt.plot(xpoints, data)
+    for index in range(len(data)):
+        plt.text(xpoints[index], data[index], data[index], size=10)
     plt.title(title)
     plt.xlabel("Variación del parámetro K")
     plt.ylabel("Cantidad de errores de clasificación")

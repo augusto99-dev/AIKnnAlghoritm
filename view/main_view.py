@@ -170,7 +170,7 @@ class Ui_MainWindow(object):
         self.errores1.setText("")
         self.errores1.setObjectName("errores1")
         self.label_6 = QtWidgets.QLabel(self.tab_3)
-        self.label_6.setGeometry(QtCore.QRect(620, 530, 223, 78))
+        self.label_6.setGeometry(QtCore.QRect(620, 540, 223, 78))
         font = QtGui.QFont()
         font.setPointSize(16)
         self.label_6.setFont(font)
