@@ -22,6 +22,11 @@ class KnnController:
         self.k_optimo = None
         self.k_optim_pondered = None
 
+        self.error_k_pon_opt = 0
+        self.error_k_opt = 0
+        self.error_k_elect = 0
+        self.error_k_pond_elect = 0
+
         # Struct vector point
         # [x,y,class,distance]
 
@@ -170,12 +175,14 @@ class KnnController:
         #print('class 1 quantity: ', class_1)
         #print('class 2 quantity: ', class_2)
 
-        if class_0 > class_1 and class_0 > class_2:
-            return 0
+        if class_2 > class_1 and class_2 > class_0:
+            return 2
         elif class_1 > class_0 and class_1 > class_2:
             return 1
+        elif class_0 > class_1 and class_0 > class_2:
+            return 0
         else:
-            return 2
+            return 1
 
         # for i in range(len(neighbors)):
         #     print('value in matrix: ', neighbors[i][0][2])
@@ -509,6 +516,7 @@ class KnnController:
         return np.array(array_test)
 
     def exec_data_knn(self, data_test, matrix, k):
+        errors = 0
         matrix_result = []
         for i in range(len(data_test)):
             neighbors = self.get_neighbors(data_test[i], matrix)
@@ -516,7 +524,7 @@ class KnnController:
             class_result = self.get_class(neighbors, k)
             #print('Clasifica como clase: ', class_result)
             #print('Sin embargo era de clase:: ', matrix[i][2])
-            if int(class_result) != matrix[i][2]:
+            if int(class_result) != int(matrix[i][2]):
                 point_failed = copy.deepcopy(matrix[i])
                 if class_result == 0:
                     point_failed[2] = -100
@@ -526,8 +534,11 @@ class KnnController:
                 matrix_result.append(point_failed)
             else:
                 matrix_result.append(matrix[i])
+            if int(class_result) != int(matrix[i][2]):
+                # contar los errores
+                errors += 1
             neighbors.clear()
-        return matrix_result
+        return [matrix_result, errors]
 
     def exec_data_knn_ponderated(self, data_test, matrix, k):
         errors = 0
@@ -559,9 +570,9 @@ class KnnController:
                 # contar los errores
                 errors += 1
             neighbors.clear()
-        #print('Errors quantity: ', errors)
+        #print('Errors quantity ponderadoo: ', errors)
         #print('Matrix result: ', matrix_result)
-        return matrix_result
+        return [matrix_result, errors]
         #return errors
 
     def run_algorith(self, path_dataset, k):
@@ -615,16 +626,28 @@ class KnnController:
 
     def get_points_k_optim(self,data):
         result_points_plot = self.exec_data_knn(data, data, self.k_optimo)
-        self.point_to_plot = np.array(result_points_plot)
-        self.point_to_plot_ponderated = np.array(self.exec_data_knn_ponderated(data, data, self.k_optim_pondered))
-        return np.array(result_points_plot)
+
+        print('errores OBTENIDOS (k optimo): ', result_points_plot[1])
+        self.error_k_opt = result_points_plot[1]
+        self.point_to_plot = np.array(result_points_plot[0])
+        ret = self.exec_data_knn_ponderated(data, data, self.k_optim_pondered)
+        self.error_k_pon_opt = ret[1]
+        print('errores OBTENIDOS (k optimo ponderado): ', ret[1])
+        self.point_to_plot_ponderated = np.array(ret[0])
+        return np.array(result_points_plot[0])
 
     def get_points_k_selected(self,data,k):
         result_points_plot = self.exec_data_knn(data, data, k)
-        self.point_to_plot_k_selected = np.array(result_points_plot)
+        print('errores OBTENIDOS (k selected): ', result_points_plot[1])
+        print('valor de K:: ', k)
+        self.error_k_elect = result_points_plot[1]
+        self.point_to_plot_k_selected = np.array(result_points_plot[0])
         # ponderated
-        self.point_to_plot_ponderated_k_selected = np.array(self.exec_data_knn_ponderated(data, data, k))
-        return np.array(result_points_plot)
+        ret = self.exec_data_knn_ponderated(data, data, k)
+        self.error_k_pond_elect = ret[1]
+        print('errores OBTENIDOS k (selected ponderado): ', ret[1])
+        self.point_to_plot_ponderated_k_selected = np.array(ret[0])
+        return np.array(result_points_plot[0])
 
     ########
     # Usar esto para obtener el k optimo ponderado
@@ -653,7 +676,8 @@ class KnnController:
     def get_errors_in_k_ponderated(self, data, k):
         errors_array_in_k_ponderated = []
         for i in range(0,k):
-            quantity_errors_ponderated = self.exec_data_knn_ponderated(data, data, i)
+            ret = self.exec_data_knn_ponderated(data, data, i)
+            quantity_errors_ponderated = ret[1]
             errors_array_in_k_ponderated.append(quantity_errors_ponderated)
             quantity_errors_ponderated = 0
         #print('Errors Array in k ponderated: ', np.array(errors_array_in_k_ponderated))
@@ -693,10 +717,10 @@ class KnnController:
         return self.k_optimo
  #traer errores de para la vista
     def get_error_k_pon_opt(self):
-        return 1
+        return self.error_k_pon_opt
     def get_error_k_pon(self):
-        return 2
+        return self.error_k_opt
     def get_error_k_elect(self):
-        return 3
+        return self.error_k_elect
     def get_error_k_pond_elect(self):
-        return 4
+        return self.error_k_pond_elect
