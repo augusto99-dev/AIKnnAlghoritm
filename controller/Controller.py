@@ -691,3 +691,12 @@ class KnnController:
         return self.k_optimo
     def get_k_optim_value_from_controller(self):
         return self.k_optimo
+ #traer errores de para la vista
+    def get_error_k_pon_opt(self):
+        return 1
+    def get_error_k_pon(self):
+        return 2
+    def get_error_k_elect(self):
+        return 3
+    def get_error_k_pond_elect(self):
+        return 4

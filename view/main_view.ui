@@ -86,7 +86,7 @@
        <item>
         <widget class="QPushButton" name="pushButton">
          <property name="text">
-          <string>Correr Algoritmo</string>
+          <string>Iniciar Clasificación</string>
          </property>
         </widget>
        </item>
@@ -305,6 +305,78 @@
        </item>
       </layout>
      </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>70</x>
+        <y>540</y>
+        <width>223</width>
+        <height>78</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Errores de clasificacion</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="errores1">
+      <property name="geometry">
+       <rect>
+        <x>290</x>
+        <y>540</y>
+        <width>40</width>
+        <height>78</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_6">
+      <property name="geometry">
+       <rect>
+        <x>620</x>
+        <y>530</y>
+        <width>223</width>
+        <height>78</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Errores de clasificacion</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="errores2">
+      <property name="geometry">
+       <rect>
+        <x>850</x>
+        <y>540</y>
+        <width>40</width>
+        <height>78</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -313,8 +385,8 @@
      <widget class="QWidget" name="verticalLayoutWidget_3">
       <property name="geometry">
        <rect>
-        <x>9</x>
-        <y>30</y>
+        <x>10</x>
+        <y>80</y>
         <width>521</width>
         <height>431</height>
        </rect>
@@ -324,13 +396,175 @@
      <widget class="QWidget" name="verticalLayoutWidget_8">
       <property name="geometry">
        <rect>
-        <x>539</x>
-        <y>30</y>
+        <x>530</x>
+        <y>80</y>
         <width>551</width>
         <height>431</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="layout_k_sel_pon"/>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>10</y>
+        <width>191</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Valor de K elegido:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="k_value_3">
+      <property name="geometry">
+       <rect>
+        <x>810</x>
+        <y>440</y>
+        <width>40</width>
+        <height>78</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="k_value_4">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>0</y>
+        <width>40</width>
+        <height>78</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="k_value_5">
+      <property name="geometry">
+       <rect>
+        <x>870</x>
+        <y>0</y>
+        <width>40</width>
+        <height>78</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>10</y>
+        <width>191</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string> Valor de K elegido:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>520</y>
+        <width>223</width>
+        <height>78</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Errores de clasificacion</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="errores3">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>520</y>
+        <width>40</width>
+        <height>78</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_8">
+      <property name="geometry">
+       <rect>
+        <x>620</x>
+        <y>520</y>
+        <width>223</width>
+        <height>78</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Errores de clasificacion</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="errores4">
+      <property name="geometry">
+       <rect>
+        <x>840</x>
+        <y>520</y>
+        <width>40</width>
+        <height>78</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">

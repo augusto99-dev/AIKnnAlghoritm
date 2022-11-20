@@ -5,7 +5,7 @@ from PyQt5.QtCore import QMutex
 import sys
 from main_view import *
 from Graphics2D import *
-from PyQt5.QtWidgets import QFileDialog, QScrollArea
+from PyQt5.QtWidgets import QFileDialog, QScrollArea, QDialog, QMessageBox, QVBoxLayout,QLabel
 from PyQt5.QtWidgets import QTableWidgetItem
 from controller.Controller import KnnController
 import csv
@@ -16,6 +16,17 @@ import numpy as np
 #qt_creator_file = "main_view.ui"
 qt_creator_file = os.path.join(os.path.abspath(os.path.dirname(sys.argv[0])), "main_view.ui")
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qt_creator_file)
+
+class Dialog(QDialog):
+    def __init__(self, *args, **kwargs):
+        super(Dialog, self).__init__(*args, **kwargs)
+        self.setWindowTitle("Espere, se esta corriendo el Algoritmo")
+        self.layout = QVBoxLayout()
+        message = QLabel("Esta ventana se cerrara automaticamente cuando termine")
+        self.layout.addWidget(message)
+        self.setFixedSize(400, 80)
+
+
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
@@ -43,7 +54,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.grafico_errores = None
         self.dataset_points = None
         self.mutex = QMutex()
+        self.dialog = Dialog(self)
 
+    def show_dialog(self):
+          # self hace referencia al padre
+        self.dialog.show()
+
+    def close_dialog(self):
+        self.dialog.close()
     def checked_item(self):
         if self.k_slider.isEnabled():
             self.k_slider.setEnabled(False)
@@ -53,6 +71,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.label_value.setEnabled(True)
 
     def run_alg(self):
+        self.show_dialog()
         self.controller.run_algorith(self.get_file(),int(self.label_value.text()))
         if self.grafico1.count() > 0:
             self.grafico1.removeWidget(self.grafica1)
@@ -91,6 +110,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.error_layout2.addWidget(self.grafico_errores_pond)
         self.k_value.setText(" "+str(self.grafica1.get_koptim()))
         self.k_value_2.setText(" "+str(self.grafica3.get_koptim()))
+        self.k_value_4.setText(" " + self.label_value.text())
+        self.k_value_5.setText(" " + self.label_value.text())
+        self.errores1.setText(" " + str(self.controller.get_error_k_pon()))
+        self.errores2.setText(" " + str(self.controller.get_error_k_pon_opt()))
+        self.errores3.setText(" " + str(self.controller.get_error_k_elect()))
+        self.errores4.setText(" " + str(self.controller.get_error_k_pond_elect()))
         if int(self.label_value.text()) != 0:
             self.grafica_k_sel_pon = Canvas_grafica_k_pond_sel(self.controller)
             self.toolbar_k_sel_pon = NavigationToolbar(self.grafica_k_sel_pon, self)
@@ -100,6 +125,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.toolbar_k_sel = NavigationToolbar(self.grafica_k_sel, self)
             self.layout_k_sel.addWidget(self.toolbar_k_sel)
             self.layout_k_sel.addWidget(self.grafica_k_sel)
+        self.close_dialog()
 
     def open_file(self, archivo):
         with open(archivo[0], 'r') as file:
@@ -133,11 +159,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         return self.dataset[0]
 
 
+
+
 # if __name__ == "__main__":
 #     app = QtWidgets.QApplication(sys.argv)
 #     window = MainWindow()
 #     window.show()
 #     app.exec_()
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
